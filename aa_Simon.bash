@@ -2,6 +2,7 @@
 SESSION=$USER
 
 #no log, auto run, eric's code
+
 if [ "$#" -eq 1 ] && [ "$1" == 'auto' ]
 then
     echo "Here we go in AUTO MODE, freq= 50, MaxThrottlePwm=1600, Kp=0.7, Ki=0.2, Kd=0.2"
