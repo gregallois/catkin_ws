@@ -131,6 +131,10 @@ add_executable(imu_magneto_calib src/imu_magneto_calib.cpp)
 target_link_libraries(imu_magneto_calib ${catkin_LIBRARIES})
 target_link_libraries(imu_magneto_calib imu)
 
+add_executable(imu_pub_with_mag src/imu_pub_with_mag.cpp)
+target_link_libraries(imu_pub_with_mag ${catkin_LIBRARIES})
+target_link_libraries(imu_pub_with_mag imu)
+
 ## Declare a C++ library
 # add_library(navio2_imu_pub
 #   src/${PROJECT_NAME}/navio2_imu_pub.cpp
