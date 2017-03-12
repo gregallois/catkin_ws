@@ -10,6 +10,7 @@
 #include "sensor_msgs/Imu.h"
 #include "sensor_msgs/MagneticField.h"
 #include <sstream>
+#include <float.h>
 
 #define G_SI 9.80665
 #define PI   3.14159
@@ -98,13 +99,19 @@ void imuSetup()
     
     uint16_t ii = 0, sample_count = 0;
     
-    float mag_max[3], mag_min[3];
+    float mag_max[3]={-FLT_MAX, -FLT_MAX, -FLT_MAX};
+    float mag_min[3]={FLT_MAX, FLT_MAX, FLT_MAX};
     
-    printf("Move Motorcycle until done!");
+    printf("%f, %f\n", mag_max[0], mag_min[0]);
+    sleep(2);
+
+    printf("Move Motorcycle until done!\n");
     sleep(4);
     
-    sample_count = 128;
+    sample_count = 200;
     for(ii = 0; ii < sample_count; ii++) {
+	printf("Getting new sample\n");
+	imu->update();
         imu->read_magnetometer(&mx, &my, &mz);
         if(mx > mag_max[0]) mag_max[0] = mx;
         if(mx < mag_min[0]) mag_min[0] = mx;
@@ -126,14 +133,10 @@ void imuSetup()
     mag_scale[1]  = (mag_max[1] - mag_min[1])/2;  // get average y axis max chord length in counts
     mag_scale[2]  = (mag_max[2] - mag_min[2])/2;  // get average z axis max chord length in counts
     
-    printf("Mag Calibration done!");
+    printf("Mag Calibration done!\n");
     printf("Offsets for magneto are: %f %f %f\n", mag_bias[0], mag_bias[1], mag_bias[2]);
 
-    sleep(4);
-    
-}
-    
-    
+    sleep(6);
     
 }
 
@@ -187,7 +190,7 @@ void imuLoop()
         mx = (mx - mag_bias[0])/mag_scale[0];
         my = (my - mag_bias[1])/mag_scale[1];
         mz = (mz - mag_bias[2])/mag_scale[2];
-
+	printf("yaw magneto %f, %f, %f, %f, %f\n", atan2(mx,my)*180/3.14, atan2(my, mx)*180/3.14, mx, my, mz);
 	   /* ax /= G_SI;
 	    ay /= G_SI;
 	    az /= G_SI;
