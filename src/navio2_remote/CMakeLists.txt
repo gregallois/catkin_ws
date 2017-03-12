@@ -123,24 +123,11 @@ include_directories(
 	include
 )
 
-add_executable(remote_pub_sub src/remote_pub_sub.cpp)
+
 add_library(rcinput src/RCInput.cpp)
 add_library(pwm src/PWM.cpp)
 add_library(util src/Util.cpp)
 #add_library(rgbled src/RGBled.cpp)
-
-target_link_libraries(remote_pub_sub ${catkin_LIBRARIES})
-target_link_libraries(remote_pub_sub rcinput)
-target_link_libraries(remote_pub_sub pwm)
-target_link_libraries(remote_pub_sub util)
-
-#
-
-add_executable(remote_multiCtr src/remote_multiCtr.cpp)
-target_link_libraries(remote_multiCtr ${catkin_LIBRARIES})
-target_link_libraries(remote_multiCtr rcinput)
-target_link_libraries(remote_multiCtr pwm)
-target_link_libraries(remote_multiCtr util)
 
 add_executable(remote_multiCtr_KalmanFiltering src/remote_multiCtr_KalmanFiltering.cpp)
 target_link_libraries(remote_multiCtr_KalmanFiltering ${catkin_LIBRARIES})

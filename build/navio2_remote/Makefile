@@ -182,20 +182,6 @@ rcinput/fast:
 .PHONY : rcinput/fast
 
 # Convenience name for target.
-navio2_remote/CMakeFiles/remote_multiCtr.dir/rule:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_remote/CMakeFiles/remote_multiCtr.dir/rule
-.PHONY : navio2_remote/CMakeFiles/remote_multiCtr.dir/rule
-
-# Convenience name for target.
-remote_multiCtr: navio2_remote/CMakeFiles/remote_multiCtr.dir/rule
-.PHONY : remote_multiCtr
-
-# fast build rule for target.
-remote_multiCtr/fast:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr.dir/build
-.PHONY : remote_multiCtr/fast
-
-# Convenience name for target.
 navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/rule:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/rule
 .PHONY : navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/rule
@@ -208,20 +194,6 @@ remote_multiCtr_KalmanFiltering: navio2_remote/CMakeFiles/remote_multiCtr_Kalman
 remote_multiCtr_KalmanFiltering/fast:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build
 .PHONY : remote_multiCtr_KalmanFiltering/fast
-
-# Convenience name for target.
-navio2_remote/CMakeFiles/remote_pub_sub.dir/rule:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_remote/CMakeFiles/remote_pub_sub.dir/rule
-.PHONY : navio2_remote/CMakeFiles/remote_pub_sub.dir/rule
-
-# Convenience name for target.
-remote_pub_sub: navio2_remote/CMakeFiles/remote_pub_sub.dir/rule
-.PHONY : remote_pub_sub
-
-# fast build rule for target.
-remote_pub_sub/fast:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_pub_sub.dir/build.make navio2_remote/CMakeFiles/remote_pub_sub.dir/build
-.PHONY : remote_pub_sub/fast
 
 # Convenience name for target.
 navio2_remote/CMakeFiles/util.dir/rule:
@@ -309,30 +281,6 @@ src/Util.cpp.s:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/util.dir/build.make navio2_remote/CMakeFiles/util.dir/src/Util.cpp.s
 .PHONY : src/Util.cpp.s
 
-src/remote_multiCtr.o: src/remote_multiCtr.cpp.o
-.PHONY : src/remote_multiCtr.o
-
-# target to build an object file
-src/remote_multiCtr.cpp.o:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr.dir/src/remote_multiCtr.cpp.o
-.PHONY : src/remote_multiCtr.cpp.o
-
-src/remote_multiCtr.i: src/remote_multiCtr.cpp.i
-.PHONY : src/remote_multiCtr.i
-
-# target to preprocess a source file
-src/remote_multiCtr.cpp.i:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr.dir/src/remote_multiCtr.cpp.i
-.PHONY : src/remote_multiCtr.cpp.i
-
-src/remote_multiCtr.s: src/remote_multiCtr.cpp.s
-.PHONY : src/remote_multiCtr.s
-
-# target to generate assembly for a file
-src/remote_multiCtr.cpp.s:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr.dir/src/remote_multiCtr.cpp.s
-.PHONY : src/remote_multiCtr.cpp.s
-
 src/remote_multiCtr_KalmanFiltering.o: src/remote_multiCtr_KalmanFiltering.cpp.o
 .PHONY : src/remote_multiCtr_KalmanFiltering.o
 
@@ -357,30 +305,6 @@ src/remote_multiCtr_KalmanFiltering.cpp.s:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/src/remote_multiCtr_KalmanFiltering.cpp.s
 .PHONY : src/remote_multiCtr_KalmanFiltering.cpp.s
 
-src/remote_pub_sub.o: src/remote_pub_sub.cpp.o
-.PHONY : src/remote_pub_sub.o
-
-# target to build an object file
-src/remote_pub_sub.cpp.o:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_pub_sub.dir/build.make navio2_remote/CMakeFiles/remote_pub_sub.dir/src/remote_pub_sub.cpp.o
-.PHONY : src/remote_pub_sub.cpp.o
-
-src/remote_pub_sub.i: src/remote_pub_sub.cpp.i
-.PHONY : src/remote_pub_sub.i
-
-# target to preprocess a source file
-src/remote_pub_sub.cpp.i:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_pub_sub.dir/build.make navio2_remote/CMakeFiles/remote_pub_sub.dir/src/remote_pub_sub.cpp.i
-.PHONY : src/remote_pub_sub.cpp.i
-
-src/remote_pub_sub.s: src/remote_pub_sub.cpp.s
-.PHONY : src/remote_pub_sub.s
-
-# target to generate assembly for a file
-src/remote_pub_sub.cpp.s:
-	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_pub_sub.dir/build.make navio2_remote/CMakeFiles/remote_pub_sub.dir/src/remote_pub_sub.cpp.s
-.PHONY : src/remote_pub_sub.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -395,9 +319,7 @@ help:
 	@echo "... pwm"
 	@echo "... rcinput"
 	@echo "... rebuild_cache"
-	@echo "... remote_multiCtr"
 	@echo "... remote_multiCtr_KalmanFiltering"
-	@echo "... remote_pub_sub"
 	@echo "... test"
 	@echo "... util"
 	@echo "... src/PWM.o"
@@ -409,15 +331,9 @@ help:
 	@echo "... src/Util.o"
 	@echo "... src/Util.i"
 	@echo "... src/Util.s"
-	@echo "... src/remote_multiCtr.o"
-	@echo "... src/remote_multiCtr.i"
-	@echo "... src/remote_multiCtr.s"
 	@echo "... src/remote_multiCtr_KalmanFiltering.o"
 	@echo "... src/remote_multiCtr_KalmanFiltering.i"
 	@echo "... src/remote_multiCtr_KalmanFiltering.s"
-	@echo "... src/remote_pub_sub.o"
-	@echo "... src/remote_pub_sub.i"
-	@echo "... src/remote_pub_sub.s"
 .PHONY : help
 
 

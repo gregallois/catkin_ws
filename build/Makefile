@@ -518,6 +518,19 @@ imu/fast:
 .PHONY : imu/fast
 
 #=============================================================================
+# Target rules for targets named imu_magneto_calib
+
+# Build rule for target.
+imu_magneto_calib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_magneto_calib
+.PHONY : imu_magneto_calib
+
+# fast build rule for target.
+imu_magneto_calib/fast:
+	$(MAKE) -f navio2_imu/CMakeFiles/imu_magneto_calib.dir/build.make navio2_imu/CMakeFiles/imu_magneto_calib.dir/build
+.PHONY : imu_magneto_calib/fast
+
+#=============================================================================
 # Target rules for targets named imu_pub
 
 # Build rule for target.
@@ -557,19 +570,6 @@ rcinput/fast:
 .PHONY : rcinput/fast
 
 #=============================================================================
-# Target rules for targets named remote_multiCtr
-
-# Build rule for target.
-remote_multiCtr: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 remote_multiCtr
-.PHONY : remote_multiCtr
-
-# fast build rule for target.
-remote_multiCtr/fast:
-	$(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr.dir/build
-.PHONY : remote_multiCtr/fast
-
-#=============================================================================
 # Target rules for targets named remote_multiCtr_KalmanFiltering
 
 # Build rule for target.
@@ -581,19 +581,6 @@ remote_multiCtr_KalmanFiltering: cmake_check_build_system
 remote_multiCtr_KalmanFiltering/fast:
 	$(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build
 .PHONY : remote_multiCtr_KalmanFiltering/fast
-
-#=============================================================================
-# Target rules for targets named remote_pub_sub
-
-# Build rule for target.
-remote_pub_sub: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 remote_pub_sub
-.PHONY : remote_pub_sub
-
-# fast build rule for target.
-remote_pub_sub/fast:
-	$(MAKE) -f navio2_remote/CMakeFiles/remote_pub_sub.dir/build.make navio2_remote/CMakeFiles/remote_pub_sub.dir/build
-.PHONY : remote_pub_sub/fast
 
 #=============================================================================
 # Target rules for targets named util
@@ -649,12 +636,11 @@ help:
 	@echo "... gps_pub"
 	@echo "... ublox"
 	@echo "... imu"
+	@echo "... imu_magneto_calib"
 	@echo "... imu_pub"
 	@echo "... pwm"
 	@echo "... rcinput"
-	@echo "... remote_multiCtr"
 	@echo "... remote_multiCtr_KalmanFiltering"
-	@echo "... remote_pub_sub"
 	@echo "... util"
 .PHONY : help
 

@@ -11,12 +11,11 @@
 /home/pi/catkin_ws/build/gtest/CMakeFiles/gtest.dir
 /home/pi/catkin_ws/build/gtest/CMakeFiles/gtest_main.dir
 /home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu.dir
+/home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu_magneto_calib.dir
 /home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu_pub.dir
 /home/pi/catkin_ws/build/navio2_remote/CMakeFiles/pwm.dir
 /home/pi/catkin_ws/build/navio2_remote/CMakeFiles/rcinput.dir
-/home/pi/catkin_ws/build/navio2_remote/CMakeFiles/remote_multiCtr.dir
 /home/pi/catkin_ws/build/navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir
-/home/pi/catkin_ws/build/navio2_remote/CMakeFiles/remote_pub_sub.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/roscpp_generate_messages_cpp.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/roscpp_generate_messages_lisp.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/roscpp_generate_messages_py.dir

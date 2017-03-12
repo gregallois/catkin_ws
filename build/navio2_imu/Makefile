@@ -168,6 +168,20 @@ imu/fast:
 .PHONY : imu/fast
 
 # Convenience name for target.
+navio2_imu/CMakeFiles/imu_magneto_calib.dir/rule:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu_magneto_calib.dir/rule
+.PHONY : navio2_imu/CMakeFiles/imu_magneto_calib.dir/rule
+
+# Convenience name for target.
+imu_magneto_calib: navio2_imu/CMakeFiles/imu_magneto_calib.dir/rule
+.PHONY : imu_magneto_calib
+
+# fast build rule for target.
+imu_magneto_calib/fast:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_magneto_calib.dir/build.make navio2_imu/CMakeFiles/imu_magneto_calib.dir/build
+.PHONY : imu_magneto_calib/fast
+
+# Convenience name for target.
 navio2_imu/CMakeFiles/imu_pub.dir/rule:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu_pub.dir/rule
 .PHONY : navio2_imu/CMakeFiles/imu_pub.dir/rule
@@ -205,6 +219,30 @@ src/MPU9250.cpp.s:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu.dir/build.make navio2_imu/CMakeFiles/imu.dir/src/MPU9250.cpp.s
 .PHONY : src/MPU9250.cpp.s
 
+src/imu_magneto_calib.o: src/imu_magneto_calib.cpp.o
+.PHONY : src/imu_magneto_calib.o
+
+# target to build an object file
+src/imu_magneto_calib.cpp.o:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_magneto_calib.dir/build.make navio2_imu/CMakeFiles/imu_magneto_calib.dir/src/imu_magneto_calib.cpp.o
+.PHONY : src/imu_magneto_calib.cpp.o
+
+src/imu_magneto_calib.i: src/imu_magneto_calib.cpp.i
+.PHONY : src/imu_magneto_calib.i
+
+# target to preprocess a source file
+src/imu_magneto_calib.cpp.i:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_magneto_calib.dir/build.make navio2_imu/CMakeFiles/imu_magneto_calib.dir/src/imu_magneto_calib.cpp.i
+.PHONY : src/imu_magneto_calib.cpp.i
+
+src/imu_magneto_calib.s: src/imu_magneto_calib.cpp.s
+.PHONY : src/imu_magneto_calib.s
+
+# target to generate assembly for a file
+src/imu_magneto_calib.cpp.s:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_magneto_calib.dir/build.make navio2_imu/CMakeFiles/imu_magneto_calib.dir/src/imu_magneto_calib.cpp.s
+.PHONY : src/imu_magneto_calib.cpp.s
+
 src/imu_pub.o: src/imu_pub.cpp.o
 .PHONY : src/imu_pub.o
 
@@ -237,6 +275,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... imu"
+	@echo "... imu_magneto_calib"
 	@echo "... imu_pub"
 	@echo "... install"
 	@echo "... install/local"
@@ -247,6 +286,9 @@ help:
 	@echo "... src/MPU9250.o"
 	@echo "... src/MPU9250.i"
 	@echo "... src/MPU9250.s"
+	@echo "... src/imu_magneto_calib.o"
+	@echo "... src/imu_magneto_calib.i"
+	@echo "... src/imu_magneto_calib.s"
 	@echo "... src/imu_pub.o"
 	@echo "... src/imu_pub.i"
 	@echo "... src/imu_pub.s"
