@@ -534,6 +534,19 @@ imu_pub/fast:
 .PHONY : imu_pub/fast
 
 #=============================================================================
+# Target rules for targets named imu_pub_with_mag
+
+# Build rule for target.
+imu_pub_with_mag: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_pub_with_mag
+.PHONY : imu_pub_with_mag
+
+# fast build rule for target.
+imu_pub_with_mag/fast:
+	$(MAKE) -f navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build.make navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build
+.PHONY : imu_pub_with_mag/fast
+
+#=============================================================================
 # Target rules for targets named pwm
 
 # Build rule for target.
@@ -627,6 +640,7 @@ help:
 	@echo "... imu"
 	@echo "... imu_magneto_calib"
 	@echo "... imu_pub"
+	@echo "... imu_pub_with_mag"
 	@echo "... pwm"
 	@echo "... rcinput"
 	@echo "... remote_multiCtr_KalmanFiltering"

@@ -45,7 +45,7 @@ tmux send-keys "cd /home/pi/bagfiles" C-m
 tmux send-keys "rosbag record -a" C-m
 
 
-[ "$#" -eq 1 ] && [ "$1" == 'all' ]
+elif [ "$#" -eq 1 ] && [ "$1" == 'all' ]
 then
 echo "Here we go in auto mode and gps information: freq= 50, MaxThrottlePwm=1600, Kp=0.7, Ki=0.2, Kd=0.2"
 sleep 2

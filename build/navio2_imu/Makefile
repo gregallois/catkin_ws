@@ -185,6 +185,20 @@ imu_pub/fast:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub.dir/build.make navio2_imu/CMakeFiles/imu_pub.dir/build
 .PHONY : imu_pub/fast
 
+# Convenience name for target.
+navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule
+.PHONY : navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule
+
+# Convenience name for target.
+imu_pub_with_mag: navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule
+.PHONY : imu_pub_with_mag
+
+# fast build rule for target.
+imu_pub_with_mag/fast:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build.make navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build
+.PHONY : imu_pub_with_mag/fast
+
 src/MPU9250.o: src/MPU9250.cpp.o
 .PHONY : src/MPU9250.o
 
@@ -257,6 +271,30 @@ src/imu_pub.cpp.s:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub.dir/build.make navio2_imu/CMakeFiles/imu_pub.dir/src/imu_pub.cpp.s
 .PHONY : src/imu_pub.cpp.s
 
+src/imu_pub_with_mag.o: src/imu_pub_with_mag.cpp.o
+.PHONY : src/imu_pub_with_mag.o
+
+# target to build an object file
+src/imu_pub_with_mag.cpp.o:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build.make navio2_imu/CMakeFiles/imu_pub_with_mag.dir/src/imu_pub_with_mag.cpp.o
+.PHONY : src/imu_pub_with_mag.cpp.o
+
+src/imu_pub_with_mag.i: src/imu_pub_with_mag.cpp.i
+.PHONY : src/imu_pub_with_mag.i
+
+# target to preprocess a source file
+src/imu_pub_with_mag.cpp.i:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build.make navio2_imu/CMakeFiles/imu_pub_with_mag.dir/src/imu_pub_with_mag.cpp.i
+.PHONY : src/imu_pub_with_mag.cpp.i
+
+src/imu_pub_with_mag.s: src/imu_pub_with_mag.cpp.s
+.PHONY : src/imu_pub_with_mag.s
+
+# target to generate assembly for a file
+src/imu_pub_with_mag.cpp.s:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build.make navio2_imu/CMakeFiles/imu_pub_with_mag.dir/src/imu_pub_with_mag.cpp.s
+.PHONY : src/imu_pub_with_mag.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -267,6 +305,7 @@ help:
 	@echo "... imu"
 	@echo "... imu_magneto_calib"
 	@echo "... imu_pub"
+	@echo "... imu_pub_with_mag"
 	@echo "... install"
 	@echo "... install/local"
 	@echo "... list_install_components"
@@ -281,6 +320,9 @@ help:
 	@echo "... src/imu_pub.o"
 	@echo "... src/imu_pub.i"
 	@echo "... src/imu_pub.s"
+	@echo "... src/imu_pub_with_mag.o"
+	@echo "... src/imu_pub_with_mag.i"
+	@echo "... src/imu_pub_with_mag.s"
 .PHONY : help
 
 
