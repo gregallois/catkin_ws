@@ -14,6 +14,14 @@ tmux send-keys "sleep 5" C-m
 tmux send-keys "source /home/pi/catkin_ws/devel/setup.bash" C-m
 tmux send-keys "rosrun navio2_imu imu_magneto_calib 49" C-m
 
+##LOGGING DATA
+tmux split-window -v
+tmux send-keys "sleep 10" C-m                                       #no needs to start earlier because 10/15 sec of calibration
+tmux send-keys "source /home/pi/catkin_ws/devel/setup.bash" C-m
+tmux send-keys "cd /home/pi/bagfiles" C-m
+tmux send-keys "rosbag record -a" C-m
+
+
 # Set default window
 tmux select-window -t $SESSION:1
 
