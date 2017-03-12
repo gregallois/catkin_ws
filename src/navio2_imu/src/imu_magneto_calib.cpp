@@ -13,6 +13,13 @@
 
 #define G_SI 9.80665
 #define PI   3.14159
+//Found after magnetometer calibration
+#define MAG_OFFSETX 38.6876
+#define MAG_OFFSETY 34.0460
+#define MAG_OFFSETZ -25.0617
+#define MAG_SCALEX 0.0069
+#define MAG_SCALEY 0.0098
+#define MAG_SCALEZ 0.0126
 
 //#define clear() printf("\033[H\033[J")
 // Objects
@@ -233,9 +240,12 @@ void update_mf_msg(sensor_msgs::MagneticField* mf_msg, InertialSensor* imu)
 
     imu->read_magnetometer(&mx, &my, &mz);
 
-	mf_msg->magnetic_field.x = mx;
+	/*mf_msg->magnetic_field.x = mx;
 	mf_msg->magnetic_field.y = my;
-	mf_msg->magnetic_field.z = mz;
+	mf_msg->magnetic_field.z = mz;*/
+    mx = (mx - MAG_OFFSETX)*MAG_SCALEX;
+    my = (my - MAG_OFFSETY)*MAG_SCALEY;
+    mz = (mz - MAG_OFFSETZ)*MAG_SCALEZ;
     printf("Magnetic Field : X = %+7.3f, Y = %+7.3f, Z = %+7.3f", mx, my, mz);
 	ROS_INFO("Magnetic Field : X = %+7.3f, Y = %+7.3f, Z = %+7.3f", mx, my, mz);
 }
