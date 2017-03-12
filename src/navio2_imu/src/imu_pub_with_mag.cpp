@@ -109,7 +109,7 @@ void imuLoop()
 
 	    // Accel + gyro.
 	
-	    /*imu->update();
+	    imu->update();
 	    imu->read_accelerometer(&ax, &ay, &az);
 	    imu->read_gyroscope(&gx, &gy, &gz);
 
@@ -118,30 +118,30 @@ void imuLoop()
 	    az /= G_SI;
 	    gx *= 180 / PI;
 	    gy *= 180 / PI;
-	    gz *= 180 / PI;*/
+	    gz *= 180 / PI;
 
 	    //ahrs.updateIMU(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, dt);
 	    	
 	    // Accel + gyro + mag.
 	    // Soft and hard iron calibration required for proper function.
 	    
-	    imu->update();
+	   /* imu->update();
 	    imu->read_accelerometer(&ay, &ax, &az);
 		az *= -1;
 	    imu->read_gyroscope(&gy, &gx, &gz);
-		gz *= -1;
+		gz *= -1;*/
 	    imu->read_magnetometer(&mx, &my, &mz);
         
         mx = (mx - MAG_OFFSETX)*MAG_SCALEX;
-        my = (my - MAG_OFFSETX)*MAG_SCALEY;
-        mz = (mz - MAG_OFFSETX)*MAG_SCALEZ;
+        my = (my - MAG_OFFSETY)*MAG_SCALEY;
+        mz = (mz - MAG_OFFSETZ)*MAG_SCALEZ;
 
-	    ax /= G_SI;
+	   /* ax /= G_SI;
 	    ay /= G_SI;
 	    az /= G_SI;
 	    gx *= 180 / PI;
 	    gy *= 180 / PI;
-	    gz *= 180 / PI;
+	    gz *= 180 / PI;*/
 
 	   ahrs.update(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, mx, my, -mz, dt);
 	    
