@@ -15,14 +15,14 @@
 #define PI   3.14159
 
 //Found after magnetometer calibration
-#define MAG_OFFSETX 38.6876
-#define MAG_OFFSETY 34.0460
-#define MAG_OFFSETZ -25.0617
-#define MAG_SCALEX 0.0069
-#define MAG_SCALEY 0.0098
-#define MAG_SCALEZ 0.0126
+//#define MAG_OFFSETX 38.6876
+//#define MAG_OFFSETY 34.0460
+//#define MAG_OFFSETZ -25.0617
+//#define MAG_SCALEX 0.0069
+//#define MAG_SCALEY 0.0098
+//#define MAG_SCALEZ 0.0126
 
-#define EARTH_MAG_FIELD 0.47  //(Gauss) in Switzerland
+//#define EARTH_MAG_FIELD 0.47  //(Gauss) in Switzerland
 
 //#define clear() printf("\033[H\033[J")
 // Objects
@@ -42,7 +42,14 @@ float roll, pitch, yaw;
 
 // Timing data
 
+//Gyro offset
 float offset[3];
+
+//Magneto calibration
+float mag_bias[3];
+float mag_scale[3];
+
+
 struct timeval tv;
 float dt, maxdt;
 float mindt = 0.01;
@@ -62,6 +69,7 @@ void imuSetup()
 
     //-------------------------------------------------------------------------
 
+    
 	printf("Beginning Gyro calibration...\n");
 	for(int i = 0; i<100; i++)
 	{
@@ -81,8 +89,52 @@ void imuSetup()
 	offset[1]/=100.0;
 	offset[2]/=100.0;
 
-	printf("Offsets are: %f %f %f\n", offset[0], offset[1], offset[2]);
+	printf("Offsets for gyro are: %f %f %f\n", offset[0], offset[1], offset[2]);
 	ahrs.setGyroOffset(offset[0], offset[1], offset[2]);
+    
+    
+    printf("Beginning Magneto calibration...\n");
+    
+    
+    uint16_t ii = 0, sample_count = 0;
+    
+    float mag_max[3], mag_min[3];
+    
+    printf("Move Motorcycle until done!");
+    sleep(4);
+    
+    sample_count = 128;
+    for(ii = 0; ii < sample_count; ii++) {
+        imu->read_magnetometer(&mx, &my, &mz);
+        if(mx > mag_max[0]) mag_max[0] = mx;
+        if(mx < mag_min[0]) mag_min[0] = mx;
+        if(my > mag_max[1]) mag_max[1] = my;
+        if(my < mag_min[1]) mag_min[1] = my;
+        if(mz > mag_max[2]) mag_max[2] = mz;
+        if(mz < mag_min[2]) mag_min[2] = mz;
+        usleep(100000); //Let time for the magneto to change values
+    }
+    
+    // Get hard iron correction
+    mag_bias[0]  = (mag_max[0] + mag_min[0])/2;  // get average x mag bias in counts
+    mag_bias[1]  = (mag_max[1] + mag_min[1])/2;  // get average y mag bias in counts
+    mag_bias[2]  = (mag_max[2] + mag_min[2])/2;  // get average z mag bias in counts
+    
+    
+    // Get soft iron correction estimate
+    mag_scale[0]  = (mag_max[0] - mag_min[0])/2;  // get average x axis max chord length in counts
+    mag_scale[1]  = (mag_max[1] - mag_min[1])/2;  // get average y axis max chord length in counts
+    mag_scale[2]  = (mag_max[2] - mag_min[2])/2;  // get average z axis max chord length in counts
+    
+    printf("Mag Calibration done!");
+    printf("Offsets for magneto are: %f %f %f\n", mag_bias[0], mag_bias[1], mag_bias[2]);
+
+    sleep(4);
+    
+}
+    
+    
+    
 }
 
 //============================== Main loop ====================================
@@ -132,9 +184,9 @@ void imuLoop()
 		gz *= -1;*/
 	    imu->read_magnetometer(&mx, &my, &mz);
         
-        mx = (mx - MAG_OFFSETX)*MAG_SCALEX;
-        my = (my - MAG_OFFSETY)*MAG_SCALEY;
-        mz = (mz - MAG_OFFSETZ)*MAG_SCALEZ;
+        mx = (mx - mag_bias[0])/mag_scale[0];
+        my = (my - mag_bias[1])/mag_scale[1];
+        mz = (mz - mag_bias[2])/mag_scale[2];
 
 	   /* ax /= G_SI;
 	    ay /= G_SI;
