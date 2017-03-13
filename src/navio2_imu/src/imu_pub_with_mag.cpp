@@ -48,8 +48,8 @@ float roll, pitch, yaw;
 float offset[3];
 
 //Magneto calibration
-float mag_bias[3];
-float mag_scale[3];
+float mag_bias[3]; //Biases terms on x-z-y
+float mag_scale[3]; //Normalization on each axis
 
 
 struct timeval tv;
@@ -104,13 +104,11 @@ void imuSetup()
     float mag_max[3]={-FLT_MAX, -FLT_MAX, -FLT_MAX};
     float mag_min[3]={FLT_MAX, FLT_MAX, FLT_MAX};
     
-    printf("%f, %f\n", mag_max[0], mag_min[0]);
-    sleep(2);
-
-    printf("Move Motorcycle until done!\n");
+    printf("Move Motorcycle the motorcycle a bit !\n");
     sleep(10);
     
     sample_count = 200;
+    printf("Sampling begins, make a turn around z and a turn around y\n");
     for(ii = 0; ii < sample_count; ii++) {
 	
 	imu2->update();
@@ -121,7 +119,6 @@ void imuSetup()
         if(my < mag_min[1]) mag_min[1] = my;
         if(mz > mag_max[2]) mag_max[2] = mz;
         if(mz < mag_min[2]) mag_min[2] = mz;
-        printf("Getting new sample, %f, %f, %f\n", mx, my, mz);
         usleep(100000); //Let time for the magneto to change values
     }
     
@@ -136,11 +133,9 @@ void imuSetup()
     mag_scale[1]  = (mag_max[1] - mag_min[1])/2;  // get average y axis max chord length in counts
     mag_scale[2]  = (mag_max[2] - mag_min[2])/2;  // get average z axis max chord length in counts
     
-    printf("Mag Calibration done!\n");
+    printf("Magnetometer Calibration done!\n");
     printf("Offsets for magneto are: %f %f %f\n", mag_bias[0], mag_bias[1], mag_bias[2]);
 
-    sleep(6);
-    
 }
 
 //============================== Main loop ====================================
@@ -178,41 +173,22 @@ void imuLoop()
 	    gy *= 180 / PI;
 	    gz *= 180 / PI;
 
-	    //ahrs.updateIMU(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, dt);
-	    	
-	    // Accel + gyro + mag.
-	    // Soft and hard iron calibration required for proper function.
-	    
-	   /* imu->update();
-	    imu->read_accelerometer(&ay, &ax, &az);
-		az *= -1;
-	    imu->read_gyroscope(&gy, &gx, &gz);
-		gz *= -1;*/
         imu2->update();
 	    imu2->read_magnetometer(&mx, &my, &mz);
         
-        /*mx = (mx - MAG_OFFSETX)*MAG_SCALEX;
-        my = (my - MAG_OFFSETY)*MAG_SCALEY;
-        mz = (mz - MAG_OFFSETZ)*MAG_SCALEZ;*/
         mx = (mx - mag_bias[0])/mag_scale[0];
         my = (my - mag_bias[1])/mag_scale[1];
         mz = (mz - mag_bias[2])/mag_scale[2];
         
-        
-       	   /* ax /= G_SI;
-	    ay /= G_SI;
-	    az /= G_SI;
-	    gx *= 180 / PI;
-	    gy *= 180 / PI;
-	    gz *= 180 / PI;*/
-
+    
+       //Mahony algorithm for IMU - accelero - magneto and gyro taken into account
 	   ahrs.update(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, mx,-my, mz, dt);
 	    
 
 	    //------------------------ Read Euler angles ------------------------------
 
 	    ahrs.getEuler(&pitch, &roll, &yaw);
-        printf("yaw %f, %f, %f, %f\n", yaw, yaw*3.14/180, atan2(-my, mx), atan2(mx, my));
+        printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n");
 
 
 	    //------------------- Discard the time of the first cycle -----------------
@@ -276,14 +252,6 @@ void update_imu_msg(sensor_msgs::Imu* imu_msg, InertialSensor* imu)
 {
 	//time stamp
 	imu_msg->header.stamp = ros::Time::now();
-	
-	//float ax, ay, az, gx, gy, gz;
-
-	//imu->update();
-
-	//imu->read_accelerometer(&ax, &ay, &az);
-        //imu->read_gyroscope(&gx, &gy, &gz);
-
 	imu_msg->orientation.x = roll;
 	imu_msg->orientation.y = pitch;
 	imu_msg->orientation.z = yaw;
@@ -297,7 +265,7 @@ void update_imu_msg(sensor_msgs::Imu* imu_msg, InertialSensor* imu)
 	imu_msg->linear_acceleration.y = ay*G_SI;
 	imu_msg->linear_acceleration.z = az*G_SI;
 
-	printf("Attitude: [Roll:%+05.2f]  [Pitch:%+05.2f]  [Yaw:%+05.2f] \n [Period:%.4fs]  [Rate:%dHz] \n \n", roll, pitch, yaw, dt, int(1/dt));
+	//printf("Attitude: [Roll:%+05.2f]  [Pitch:%+05.2f]  [Yaw:%+05.2f] \n [Period:%.4fs]  [Rate:%dHz] \n \n", roll, pitch, yaw, dt, int(1/dt));
 
 }
 
@@ -306,12 +274,6 @@ void update_mf_msg(sensor_msgs::MagneticField* mf_msg, InertialSensor* imu)
 	//time stamp
 	mf_msg->header.stamp = ros::Time::now();
 	
-	//float mx, my, mz;
-
-	//imu->update();
-
-        //imu->read_magnetometer(&mx, &my, &mz);
-
 	mf_msg->magnetic_field.x = mx;
 	mf_msg->magnetic_field.y = my;
 	mf_msg->magnetic_field.z = mz;
@@ -355,19 +317,23 @@ int main(int argc, char **argv)
 	printf("Selected: MPU9250\n");
 	imu = new MPU9250();
     
+    if (!imu->probe())
+    {
+        printf("MPU9250 not enabled\n");
+        return EXIT_FAILURE;
+    }
+    
+    
     printf("Selected: LSM9DS1\n");
     imu2 = new LSM9DS1();
+    
+    if (!imu2->probe())
+    {
+        printf("LSM9DS1 not enabled\n");
+        return EXIT_FAILURE;
+    }
    
-
-	/***************/
-	/* Test Sensor */
-	/***************/
-	if (!imu->probe()) 
-	{
-		printf("Sensor not enabled\n");
-		return EXIT_FAILURE;
-	}
-
+    //Initialize and calibrate both IMU
 	imuSetup();
 
 	while (ros::ok())
