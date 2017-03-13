@@ -108,11 +108,11 @@ void imuSetup()
     sleep(2);
 
     printf("Move Motorcycle until done!\n");
-    sleep(4);
+    sleep(10);
     
     sample_count = 200;
     for(ii = 0; ii < sample_count; ii++) {
-	printf("Getting new sample\n");
+	
 	imu2->update();
         imu2->read_magnetometer(&mx, &my, &mz);
         if(mx > mag_max[0]) mag_max[0] = mx;
@@ -121,6 +121,7 @@ void imuSetup()
         if(my < mag_min[1]) mag_min[1] = my;
         if(mz > mag_max[2]) mag_max[2] = mz;
         if(mz < mag_min[2]) mag_min[2] = mz;
+        printf("Getting new sample, %f, %f, %f\n", mx, my, mz);
         usleep(100000); //Let time for the magneto to change values
     }
     
