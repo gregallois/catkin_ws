@@ -19,7 +19,7 @@
  #define MAG_OFFSETX 20.5298
  #define MAG_OFFSETY -30.7021
  #define MAG_OFFSETZ -16.7430
- #define MAG_SCALEX 0.0042
+ #define MAG_SCALEX 0.0168
  #define MAG_SCALEY 0.0317
  #define MAG_SCALEZ 0.0143
 
