@@ -16,12 +16,12 @@
 #define PI   3.14159
 
 //Found after magnetometer calibration
- #define MAG_OFFSETX 20.5298
+ /*#define MAG_OFFSETX 20.5298
  #define MAG_OFFSETY -30.7021
  #define MAG_OFFSETZ -16.7430
  #define MAG_SCALEX 0.0168
  #define MAG_SCALEY 0.0317
- #define MAG_SCALEZ 0.0143
+ #define MAG_SCALEZ 0.0143*/
 
 //#define EARTH_MAG_FIELD 0.47  //(Gauss) in Switzerland
 
@@ -113,8 +113,8 @@ void imuSetup()
     sample_count = 200;
     for(ii = 0; ii < sample_count; ii++) {
 	printf("Getting new sample\n");
-	imu->update();
-        imu->read_magnetometer(&mx, &my, &mz);
+	imu2->update();
+        imu2->read_magnetometer(&mx, &my, &mz);
         if(mx > mag_max[0]) mag_max[0] = mx;
         if(mx < mag_min[0]) mag_min[0] = mx;
         if(my > mag_max[1]) mag_max[1] = my;
@@ -190,11 +190,15 @@ void imuLoop()
         imu2->update();
 	    imu2->read_magnetometer(&mx, &my, &mz);
         
-        mx = (mx - MAG_OFFSETX)*MAG_SCALEX;
+        /*mx = (mx - MAG_OFFSETX)*MAG_SCALEX;
         my = (my - MAG_OFFSETY)*MAG_SCALEY;
-        mz = (mz - MAG_OFFSETZ)*MAG_SCALEZ;
-	printf("yaw magneto %f, %f, %f, %f, %f\n", atan2(mx,my)*180/3.14, atan2(my, mx)*180/3.14, mx, my, mz);
-	   /* ax /= G_SI;
+        mz = (mz - MAG_OFFSETZ)*MAG_SCALEZ;*/
+        mx = (mx - mag_bias[0])/mag_scale[0];
+        my = (my - mag_bias[1])/mag_scale[1];
+        mz = (mz - mag_bias[2])/mag_scale[2];
+        
+        
+       	   /* ax /= G_SI;
 	    ay /= G_SI;
 	    az /= G_SI;
 	    gx *= 180 / PI;
@@ -207,6 +211,8 @@ void imuLoop()
 	    //------------------------ Read Euler angles ------------------------------
 
 	    ahrs.getEuler(&pitch, &roll, &yaw);
+        printf("yaw %f, %f, %f, %f\n", yaw, mx, my, mz);
+
 
 	    //------------------- Discard the time of the first cycle -----------------
 
