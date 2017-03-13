@@ -34,6 +34,8 @@ float roll, pitch, yaw;
 
 float offset[3];
 struct timeval tv;
+struct timeval tv2;
+
 float dt, maxdt;
 float mindt = 0.01;
 unsigned long previoustime, currenttime;
@@ -41,6 +43,9 @@ float dtsumm = 0;
 int isFirst = 1;
 
 int freq = 100;
+
+float dt2;
+unsigned long previoustime2, currenttime2;
 
 //============================= Initial setup =================================
 
@@ -224,6 +229,9 @@ void update_imu_msg(sensor_msgs::Imu* imu_msg, InertialSensor* imu)
 
 void update_mf_msg(sensor_msgs::MagneticField* mf_msg, InertialSensor* imu)
 {
+    gettimeofday(&tv2,NULL);
+    currenttime2 = 1000000 * tv2.tv_sec + tv2.tv_usec;
+    dt2 = (currenttime2 - previoustime2) / 1000000.0;
 	//time stamp
 	mf_msg->header.stamp = ros::Time::now();
 	
@@ -236,8 +244,9 @@ void update_mf_msg(sensor_msgs::MagneticField* mf_msg, InertialSensor* imu)
 	mf_msg->magnetic_field.x = mx;
 	mf_msg->magnetic_field.y = my;
 	mf_msg->magnetic_field.z = mz;
-    printf("Magnetic Field : X = %+7.3f, Y = %+7.3f, Z = %+7.3f", mx, my, mz);
-	ROS_INFO("Magnetic Field : X = %+7.3f, Y = %+7.3f, Z = %+7.3f", mx, my, mz);
+    printf("Magnetic Field : X = %+7.3f, Y = %+7.3f, Z = %+7.3f, %f", mx, my, mz, dt2);
+	//ROS_INFO("Magnetic Field : X = %+7.3f, Y = %+7.3f, Z = %+7.3f", mx, my, mz);
+    previoustime2 = currenttime2;
 }
 
 int main(int argc, char **argv)
