@@ -245,7 +245,7 @@ void update_mf_msg(sensor_msgs::MagneticField* mf_msg, InertialSensor* imu)
 	mf_msg->magnetic_field.x = mx;
 	mf_msg->magnetic_field.y = my;
 	mf_msg->magnetic_field.z = mz;
-    printf("Magnetic Field : X = %+7.3f, Y = %+7.3f, Z = %+7.3f, %f", mx, my, mz, dt2);
+    printf("MX = %+7.3f, Y = %+7.3f, Z = %+7.3f, %f\n", mx, my, mz, dt2);
 	//ROS_INFO("Magnetic Field : X = %+7.3f, Y = %+7.3f, Z = %+7.3f", mx, my, mz);
     previoustime2 = currenttime2;
 }
