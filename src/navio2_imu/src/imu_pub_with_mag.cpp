@@ -15,17 +15,6 @@
 #define G_SI 9.80665
 #define PI   3.14159
 
-//Found after magnetometer calibration
- /*#define MAG_OFFSETX 20.5298
- #define MAG_OFFSETY -30.7021
- #define MAG_OFFSETZ -16.7430
- #define MAG_SCALEX 0.0168
- #define MAG_SCALEY 0.0317
- #define MAG_SCALEZ 0.0143*/
-
-//#define EARTH_MAG_FIELD 0.47  //(Gauss) in Switzerland
-
-//#define clear() printf("\033[H\033[J")
 // Objects
 
 InertialSensor *imu;
@@ -188,7 +177,7 @@ void imuLoop()
 	    //------------------------ Read Euler angles ------------------------------
 
 	    ahrs.getEuler(&pitch, &roll, &yaw);
-        printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n");
+        printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
 
 
 	    //------------------- Discard the time of the first cycle -----------------
