@@ -269,6 +269,9 @@ gtest_force_shared_crt:BOOL=OFF
 gtest_main_LIB_DEPENDS:STATIC=general;-lpthread;general;gtest;
 
 //Dependencies for target
+imu2_LIB_DEPENDS:STATIC=
+
+//Dependencies for target
 imu_LIB_DEPENDS:STATIC=
 
 //Path to a library.

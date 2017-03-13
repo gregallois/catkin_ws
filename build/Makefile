@@ -508,6 +508,19 @@ imu/fast:
 .PHONY : imu/fast
 
 #=============================================================================
+# Target rules for targets named imu2
+
+# Build rule for target.
+imu2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu2
+.PHONY : imu2
+
+# fast build rule for target.
+imu2/fast:
+	$(MAKE) -f navio2_imu/CMakeFiles/imu2.dir/build.make navio2_imu/CMakeFiles/imu2.dir/build
+.PHONY : imu2/fast
+
+#=============================================================================
 # Target rules for targets named imu_magneto_calib
 
 # Build rule for target.
@@ -638,6 +651,7 @@ help:
 	@echo "... gps_pub"
 	@echo "... ublox"
 	@echo "... imu"
+	@echo "... imu2"
 	@echo "... imu_magneto_calib"
 	@echo "... imu_pub"
 	@echo "... imu_pub_with_mag"

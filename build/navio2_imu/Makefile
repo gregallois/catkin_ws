@@ -158,6 +158,20 @@ imu/fast:
 .PHONY : imu/fast
 
 # Convenience name for target.
+navio2_imu/CMakeFiles/imu2.dir/rule:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu2.dir/rule
+.PHONY : navio2_imu/CMakeFiles/imu2.dir/rule
+
+# Convenience name for target.
+imu2: navio2_imu/CMakeFiles/imu2.dir/rule
+.PHONY : imu2
+
+# fast build rule for target.
+imu2/fast:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu2.dir/build.make navio2_imu/CMakeFiles/imu2.dir/build
+.PHONY : imu2/fast
+
+# Convenience name for target.
 navio2_imu/CMakeFiles/imu_magneto_calib.dir/rule:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu_magneto_calib.dir/rule
 .PHONY : navio2_imu/CMakeFiles/imu_magneto_calib.dir/rule
@@ -198,6 +212,30 @@ imu_pub_with_mag: navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule
 imu_pub_with_mag/fast:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build.make navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build
 .PHONY : imu_pub_with_mag/fast
+
+src/LSM9DS1.o: src/LSM9DS1.cpp.o
+.PHONY : src/LSM9DS1.o
+
+# target to build an object file
+src/LSM9DS1.cpp.o:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu2.dir/build.make navio2_imu/CMakeFiles/imu2.dir/src/LSM9DS1.cpp.o
+.PHONY : src/LSM9DS1.cpp.o
+
+src/LSM9DS1.i: src/LSM9DS1.cpp.i
+.PHONY : src/LSM9DS1.i
+
+# target to preprocess a source file
+src/LSM9DS1.cpp.i:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu2.dir/build.make navio2_imu/CMakeFiles/imu2.dir/src/LSM9DS1.cpp.i
+.PHONY : src/LSM9DS1.cpp.i
+
+src/LSM9DS1.s: src/LSM9DS1.cpp.s
+.PHONY : src/LSM9DS1.s
+
+# target to generate assembly for a file
+src/LSM9DS1.cpp.s:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu2.dir/build.make navio2_imu/CMakeFiles/imu2.dir/src/LSM9DS1.cpp.s
+.PHONY : src/LSM9DS1.cpp.s
 
 src/MPU9250.o: src/MPU9250.cpp.o
 .PHONY : src/MPU9250.o
@@ -303,6 +341,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... imu"
+	@echo "... imu2"
 	@echo "... imu_magneto_calib"
 	@echo "... imu_pub"
 	@echo "... imu_pub_with_mag"
@@ -311,6 +350,9 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... src/LSM9DS1.o"
+	@echo "... src/LSM9DS1.i"
+	@echo "... src/LSM9DS1.s"
 	@echo "... src/MPU9250.o"
 	@echo "... src/MPU9250.i"
 	@echo "... src/MPU9250.s"

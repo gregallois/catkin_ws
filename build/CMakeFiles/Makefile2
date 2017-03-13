@@ -943,7 +943,7 @@ clean: navio2_gps/CMakeFiles/gps_pub.dir/clean
 navio2_gps/CMakeFiles/ublox.dir/all:
 	$(MAKE) -f navio2_gps/CMakeFiles/ublox.dir/build.make navio2_gps/CMakeFiles/ublox.dir/depend
 	$(MAKE) -f navio2_gps/CMakeFiles/ublox.dir/build.make navio2_gps/CMakeFiles/ublox.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  13
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  14
 	@echo "Built target ublox"
 .PHONY : navio2_gps/CMakeFiles/ublox.dir/all
 
@@ -976,6 +976,7 @@ clean: navio2_gps/CMakeFiles/ublox.dir/clean
 
 # Convenience name for "all" pass in the directory.
 navio2_imu/all: navio2_imu/CMakeFiles/imu.dir/all
+navio2_imu/all: navio2_imu/CMakeFiles/imu2.dir/all
 navio2_imu/all: navio2_imu/CMakeFiles/imu_magneto_calib.dir/all
 navio2_imu/all: navio2_imu/CMakeFiles/imu_pub.dir/all
 navio2_imu/all: navio2_imu/CMakeFiles/imu_pub_with_mag.dir/all
@@ -983,6 +984,7 @@ navio2_imu/all: navio2_imu/CMakeFiles/imu_pub_with_mag.dir/all
 
 # Convenience name for "clean" pass in the directory.
 navio2_imu/clean: navio2_imu/CMakeFiles/imu.dir/clean
+navio2_imu/clean: navio2_imu/CMakeFiles/imu2.dir/clean
 navio2_imu/clean: navio2_imu/CMakeFiles/imu_magneto_calib.dir/clean
 navio2_imu/clean: navio2_imu/CMakeFiles/imu_pub.dir/clean
 navio2_imu/clean: navio2_imu/CMakeFiles/imu_pub_with_mag.dir/clean
@@ -1028,13 +1030,49 @@ clean: navio2_imu/CMakeFiles/imu.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Target rules for target navio2_imu/CMakeFiles/imu2.dir
+
+# All Build rule for target.
+navio2_imu/CMakeFiles/imu2.dir/all:
+	$(MAKE) -f navio2_imu/CMakeFiles/imu2.dir/build.make navio2_imu/CMakeFiles/imu2.dir/depend
+	$(MAKE) -f navio2_imu/CMakeFiles/imu2.dir/build.make navio2_imu/CMakeFiles/imu2.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  7
+	@echo "Built target imu2"
+.PHONY : navio2_imu/CMakeFiles/imu2.dir/all
+
+# Include target in all.
+all: navio2_imu/CMakeFiles/imu2.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+navio2_imu/CMakeFiles/imu2.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/catkin_ws/build/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu2.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/catkin_ws/build/CMakeFiles 0
+.PHONY : navio2_imu/CMakeFiles/imu2.dir/rule
+
+# Convenience name for target.
+imu2: navio2_imu/CMakeFiles/imu2.dir/rule
+.PHONY : imu2
+
+# clean rule for target.
+navio2_imu/CMakeFiles/imu2.dir/clean:
+	$(MAKE) -f navio2_imu/CMakeFiles/imu2.dir/build.make navio2_imu/CMakeFiles/imu2.dir/clean
+.PHONY : navio2_imu/CMakeFiles/imu2.dir/clean
+
+# clean rule for target.
+clean: navio2_imu/CMakeFiles/imu2.dir/clean
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target navio2_imu/CMakeFiles/imu_magneto_calib.dir
 
 # All Build rule for target.
 navio2_imu/CMakeFiles/imu_magneto_calib.dir/all: navio2_imu/CMakeFiles/imu.dir/all
+navio2_imu/CMakeFiles/imu_magneto_calib.dir/all: navio2_imu/CMakeFiles/imu2.dir/all
 	$(MAKE) -f navio2_imu/CMakeFiles/imu_magneto_calib.dir/build.make navio2_imu/CMakeFiles/imu_magneto_calib.dir/depend
 	$(MAKE) -f navio2_imu/CMakeFiles/imu_magneto_calib.dir/build.make navio2_imu/CMakeFiles/imu_magneto_calib.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  7
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  8
 	@echo "Built target imu_magneto_calib"
 .PHONY : navio2_imu/CMakeFiles/imu_magneto_calib.dir/all
 
@@ -1044,7 +1082,7 @@ all: navio2_imu/CMakeFiles/imu_magneto_calib.dir/all
 
 # Build rule for subdir invocation for target.
 navio2_imu/CMakeFiles/imu_magneto_calib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/catkin_ws/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/catkin_ws/build/CMakeFiles 3
 	$(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu_magneto_calib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/catkin_ws/build/CMakeFiles 0
 .PHONY : navio2_imu/CMakeFiles/imu_magneto_calib.dir/rule
@@ -1069,7 +1107,7 @@ clean: navio2_imu/CMakeFiles/imu_magneto_calib.dir/clean
 navio2_imu/CMakeFiles/imu_pub.dir/all: navio2_imu/CMakeFiles/imu.dir/all
 	$(MAKE) -f navio2_imu/CMakeFiles/imu_pub.dir/build.make navio2_imu/CMakeFiles/imu_pub.dir/depend
 	$(MAKE) -f navio2_imu/CMakeFiles/imu_pub.dir/build.make navio2_imu/CMakeFiles/imu_pub.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  8
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  9
 	@echo "Built target imu_pub"
 .PHONY : navio2_imu/CMakeFiles/imu_pub.dir/all
 
@@ -1102,9 +1140,10 @@ clean: navio2_imu/CMakeFiles/imu_pub.dir/clean
 
 # All Build rule for target.
 navio2_imu/CMakeFiles/imu_pub_with_mag.dir/all: navio2_imu/CMakeFiles/imu.dir/all
+navio2_imu/CMakeFiles/imu_pub_with_mag.dir/all: navio2_imu/CMakeFiles/imu2.dir/all
 	$(MAKE) -f navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build.make navio2_imu/CMakeFiles/imu_pub_with_mag.dir/depend
 	$(MAKE) -f navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build.make navio2_imu/CMakeFiles/imu_pub_with_mag.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  9
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  10
 	@echo "Built target imu_pub_with_mag"
 .PHONY : navio2_imu/CMakeFiles/imu_pub_with_mag.dir/all
 
@@ -1114,7 +1153,7 @@ all: navio2_imu/CMakeFiles/imu_pub_with_mag.dir/all
 
 # Build rule for subdir invocation for target.
 navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/catkin_ws/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/catkin_ws/build/CMakeFiles 3
 	$(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu_pub_with_mag.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/catkin_ws/build/CMakeFiles 0
 .PHONY : navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule
@@ -1160,7 +1199,7 @@ navio2_remote/preinstall:
 navio2_remote/CMakeFiles/pwm.dir/all:
 	$(MAKE) -f navio2_remote/CMakeFiles/pwm.dir/build.make navio2_remote/CMakeFiles/pwm.dir/depend
 	$(MAKE) -f navio2_remote/CMakeFiles/pwm.dir/build.make navio2_remote/CMakeFiles/pwm.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  10
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  11
 	@echo "Built target pwm"
 .PHONY : navio2_remote/CMakeFiles/pwm.dir/all
 
@@ -1195,7 +1234,7 @@ clean: navio2_remote/CMakeFiles/pwm.dir/clean
 navio2_remote/CMakeFiles/rcinput.dir/all:
 	$(MAKE) -f navio2_remote/CMakeFiles/rcinput.dir/build.make navio2_remote/CMakeFiles/rcinput.dir/depend
 	$(MAKE) -f navio2_remote/CMakeFiles/rcinput.dir/build.make navio2_remote/CMakeFiles/rcinput.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  11
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  12
 	@echo "Built target rcinput"
 .PHONY : navio2_remote/CMakeFiles/rcinput.dir/all
 
@@ -1228,11 +1267,11 @@ clean: navio2_remote/CMakeFiles/rcinput.dir/clean
 
 # All Build rule for target.
 navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/all: navio2_remote/CMakeFiles/pwm.dir/all
-navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/all: navio2_remote/CMakeFiles/rcinput.dir/all
 navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/all: navio2_remote/CMakeFiles/util.dir/all
+navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/all: navio2_remote/CMakeFiles/rcinput.dir/all
 	$(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/depend
 	$(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  12
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  13
 	@echo "Built target remote_multiCtr_KalmanFiltering"
 .PHONY : navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/all
 
@@ -1267,7 +1306,7 @@ clean: navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/clean
 navio2_remote/CMakeFiles/util.dir/all:
 	$(MAKE) -f navio2_remote/CMakeFiles/util.dir/build.make navio2_remote/CMakeFiles/util.dir/depend
 	$(MAKE) -f navio2_remote/CMakeFiles/util.dir/build.make navio2_remote/CMakeFiles/util.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  14
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/catkin_ws/build/CMakeFiles  15
 	@echo "Built target util"
 .PHONY : navio2_remote/CMakeFiles/util.dir/all
 

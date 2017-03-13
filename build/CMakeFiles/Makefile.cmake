@@ -198,6 +198,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "navio2_gps/CMakeFiles/gps_pub.dir/DependInfo.cmake"
   "navio2_gps/CMakeFiles/ublox.dir/DependInfo.cmake"
   "navio2_imu/CMakeFiles/imu.dir/DependInfo.cmake"
+  "navio2_imu/CMakeFiles/imu2.dir/DependInfo.cmake"
   "navio2_imu/CMakeFiles/imu_magneto_calib.dir/DependInfo.cmake"
   "navio2_imu/CMakeFiles/imu_pub.dir/DependInfo.cmake"
   "navio2_imu/CMakeFiles/imu_pub_with_mag.dir/DependInfo.cmake"
