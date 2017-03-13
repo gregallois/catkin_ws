@@ -18,6 +18,7 @@
 // Objects
 
 InertialSensor *imu;
+InertialSensor *imu2;
 AHRS    ahrs;   // Mahony AHRS
 
 // Sensor data
@@ -237,9 +238,9 @@ void update_mf_msg(sensor_msgs::MagneticField* mf_msg, InertialSensor* imu)
 	
 	float mx, my, mz;
 
-	imu->update();
+	imu2->update();
 
-    imu->read_magnetometer(&mx, &my, &mz);
+    imu2->read_magnetometer(&mx, &my, &mz);
 
 	mf_msg->magnetic_field.x = mx;
 	mf_msg->magnetic_field.y = my;
@@ -284,6 +285,8 @@ int main(int argc, char **argv)
 
 	printf("Selected: MPU9250\n");
 	imu = new MPU9250();
+    imu2 = new LSM9DS1();
+    imu2->initialize()
 
 	/***************/
 	/* Test Sensor */
