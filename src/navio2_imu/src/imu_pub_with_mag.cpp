@@ -16,12 +16,12 @@
 #define PI   3.14159
 
 //Found after magnetometer calibration
-//#define MAG_OFFSETX 38.6876
-//#define MAG_OFFSETY 34.0460
-//#define MAG_OFFSETZ -25.0617
-//#define MAG_SCALEX 0.0069
-//#define MAG_SCALEY 0.0098
-//#define MAG_SCALEZ 0.0126
+ #define MAG_OFFSETX 20.5298
+ #define MAG_OFFSETY -30.7021
+ #define MAG_OFFSETZ -16.7430
+ #define MAG_SCALEX 0.0042
+ #define MAG_SCALEY 0.0317
+ #define MAG_SCALEZ 0.0143
 
 //#define EARTH_MAG_FIELD 0.47  //(Gauss) in Switzerland
 
@@ -29,6 +29,7 @@
 // Objects
 
 InertialSensor *imu;
+InertialSensor *imu2;
 AHRS    ahrs;   // Mahony AHRS
 
 // Sensor data
@@ -67,6 +68,7 @@ void imuSetup()
     //----------------------- MPU initialization ------------------------------
 
     imu->initialize();
+    imu2->initialize();
 
     //-------------------------------------------------------------------------
 
@@ -185,11 +187,12 @@ void imuLoop()
 		az *= -1;
 	    imu->read_gyroscope(&gy, &gx, &gz);
 		gz *= -1;*/
-	    imu->read_magnetometer(&mx, &my, &mz);
+        imu2->update();
+	    imu2->read_magnetometer(&mx, &my, &mz);
         
-        mx = (mx - mag_bias[0])/mag_scale[0];
-        my = (my - mag_bias[1])/mag_scale[1];
-        mz = (mz - mag_bias[2])/mag_scale[2];
+        mx = (mx - MAG_OFFSETX)*MAG_SCALEX;
+        my = (my - MAG_OFFSETY)*MAG_SCALEY;
+        mz = (mz - MAG_OFFSETZ)*MAG_SCALEZ;
 	printf("yaw magneto %f, %f, %f, %f, %f\n", atan2(mx,my)*180/3.14, atan2(my, mx)*180/3.14, mx, my, mz);
 	   /* ax /= G_SI;
 	    ay /= G_SI;
@@ -344,6 +347,10 @@ int main(int argc, char **argv)
 
 	printf("Selected: MPU9250\n");
 	imu = new MPU9250();
+    
+    printf("Selected: LSM9DS1\n");
+    imu2 = new LSM9DS1();
+   
 
 	/***************/
 	/* Test Sensor */
