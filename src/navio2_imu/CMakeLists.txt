@@ -127,7 +127,7 @@ add_library(imu src/MPU9250.cpp)
 add_library(imu2 src/LSM9DS1.cpp)
 target_link_libraries(imu_pub ${catkin_LIBRARIES})
 target_link_libraries(imu_pub imu)
-target_link_libraries(imu_pub_with_mag imu2)
+target_link_libraries(imu_pub imu2)
 
 add_executable(imu_magneto_calib src/imu_magneto_calib.cpp)
 target_link_libraries(imu_magneto_calib ${catkin_LIBRARIES})

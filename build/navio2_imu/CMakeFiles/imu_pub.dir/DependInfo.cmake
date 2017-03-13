@@ -18,6 +18,7 @@ set(CMAKE_TARGET_DEFINITIONS
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
   "/home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu.dir/DependInfo.cmake"
+  "/home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu2.dir/DependInfo.cmake"
   )
 
 # The include file search paths:

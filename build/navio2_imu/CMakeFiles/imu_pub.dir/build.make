@@ -99,6 +99,7 @@ imu_pub_EXTERNAL_OBJECTS =
 /home/pi/catkin_ws/devel/lib/navio2_imu/imu_pub: /usr/lib/arm-linux-gnueabihf/libpthread.so
 /home/pi/catkin_ws/devel/lib/navio2_imu/imu_pub: /usr/lib/arm-linux-gnueabihf/libconsole_bridge.so
 /home/pi/catkin_ws/devel/lib/navio2_imu/imu_pub: /home/pi/catkin_ws/devel/lib/libimu.so
+/home/pi/catkin_ws/devel/lib/navio2_imu/imu_pub: /home/pi/catkin_ws/devel/lib/libimu2.so
 /home/pi/catkin_ws/devel/lib/navio2_imu/imu_pub: navio2_imu/CMakeFiles/imu_pub.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable /home/pi/catkin_ws/devel/lib/navio2_imu/imu_pub"
 	cd /home/pi/catkin_ws/build/navio2_imu && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/imu_pub.dir/link.txt --verbose=$(VERBOSE)
