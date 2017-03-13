@@ -124,6 +124,7 @@ include_directories(
 
 add_executable(imu_pub src/imu_pub.cpp)
 add_library(imu src/MPU9250.cpp)
+add_library(imu src/LSM9DS1.cpp)
 target_link_libraries(imu_pub ${catkin_LIBRARIES})
 target_link_libraries(imu_pub imu)
 
