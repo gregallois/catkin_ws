@@ -206,13 +206,13 @@ void imuLoop()
 	    gy *= 180 / PI;
 	    gz *= 180 / PI;*/
 
-	   ahrs.update(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, mx, my, -mz, dt);
+	   ahrs.update(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, mx,-my, mz, dt);
 	    
 
 	    //------------------------ Read Euler angles ------------------------------
 
 	    ahrs.getEuler(&pitch, &roll, &yaw);
-        printf("yaw %f, %f, %f, %f\n", yaw, yaw*pi/180, atan2(my, mx), atan2(mx, my));
+        printf("yaw %f, %f, %f, %f\n", yaw, yaw*3.14/180, atan2(-my, mx), atan2(mx, my));
 
 
 	    //------------------- Discard the time of the first cycle -----------------
