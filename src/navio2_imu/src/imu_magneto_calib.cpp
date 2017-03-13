@@ -286,7 +286,7 @@ int main(int argc, char **argv)
 	printf("Selected: MPU9250\n");
 	imu = new MPU9250();
     imu2 = new LSM9DS1();
-    imu2->initialize()
+    imu2->initialize();
 
 	/***************/
 	/* Test Sensor */

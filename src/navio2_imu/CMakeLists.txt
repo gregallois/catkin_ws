@@ -124,7 +124,7 @@ include_directories(
 
 add_executable(imu_pub src/imu_pub.cpp)
 add_library(imu src/MPU9250.cpp)
-add_library(imu src/LSM9DS1.cpp)
+add_library(imu2 src/LSM9DS1.cpp)
 target_link_libraries(imu_pub ${catkin_LIBRARIES})
 target_link_libraries(imu_pub imu)
 
@@ -135,6 +135,7 @@ target_link_libraries(imu_magneto_calib imu)
 add_executable(imu_pub_with_mag src/imu_pub_with_mag.cpp)
 target_link_libraries(imu_pub_with_mag ${catkin_LIBRARIES})
 target_link_libraries(imu_pub_with_mag imu)
+target_link_libraries(imu_pub_with_mag imu2)
 
 ## Declare a C++ library
 # add_library(navio2_imu_pub
