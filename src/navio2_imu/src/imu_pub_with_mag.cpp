@@ -212,7 +212,7 @@ void imuLoop()
 	    //------------------------ Read Euler angles ------------------------------
 
 	    ahrs.getEuler(&pitch, &roll, &yaw);
-        printf("yaw %f, %f, %f, %f\n", yaw, mx, my, mz);
+        printf("yaw %f, %f, %f, %f\n", yaw, yaw*pi/180, atan2(my, mx), atan2(mx, my));
 
 
 	    //------------------- Discard the time of the first cycle -----------------
