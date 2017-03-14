@@ -135,6 +135,12 @@ target_link_libraries(remote_multiCtr_KalmanFiltering rcinput)
 target_link_libraries(remote_multiCtr_KalmanFiltering pwm)
 target_link_libraries(remote_multiCtr_KalmanFiltering util)
 
+add_executable(speed_noise_test src/speed_noise_test.cpp)
+target_link_libraries(speed_noise_test ${catkin_LIBRARIES})
+target_link_libraries(speed_noise_test rcinput)
+target_link_libraries(speed_noise_test pwm)
+target_link_libraries(speed_noise_test util)
+
 
 #target_link_libraries(remote_pub_sub_sat_8_shape rgbled)
 
