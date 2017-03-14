@@ -538,7 +538,7 @@
 			//write readings on pwm output
 			motor.set_duty_cycle(MOTOR_PWM_OUT, ((float)motor_input)/1000.0f); 
 			servo.set_duty_cycle(SERVO_PWM_OUT, ((float)servo_input)/1000.0f);
-
+			printf("motor_input : %f, desired : %f, %f\n", (float)motor_input, desired_speed, (float)desired_pwm);
 			//Measure time for initial roll calibration
 			the_time = ros::Time::now().sec%1000-initTime;
 
