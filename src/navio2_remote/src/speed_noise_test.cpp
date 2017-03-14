@@ -11,7 +11,7 @@
 	#include <sstream>
 
     //Constant speed objective
-    #define TARGET_SPEED 5.5f
+    #define TARGET_PWM 1574
 
 	//PWM Pins on Navio2
 	#define MOTOR_PWM_OUT 9
@@ -481,11 +481,6 @@
 		int dtf = 0;// dtf read from arduino. dtf = dt*4 in msec
 		float R = 0.0625f; //Rear Wheel Radius
         
-        
-        int desired_pwm = (int)floor(500*TARGET_SPEED/20.6+1500);
-        
-        if (desired_pwm > saturation) desired_pwm = saturation;
-        
 
 		RollOffset = 0;
 		int initTime = ros::Time::now().sec%1000;
@@ -524,7 +519,7 @@
 			currentTimeSpeed = ros::Time::now();
 
 			//calculate output to motor from pid controller
-			motor_input = desired_pwm; // pid_Motor_Output(desired_speed);
+			motor_input = TARGET_PWM; // pid_Motor_Output(desired_speed);
 
 			//calculate output to servo from pid controller
 			servo_input = pid_Servo_Output(pid_Ref_Output(desired_roll));
