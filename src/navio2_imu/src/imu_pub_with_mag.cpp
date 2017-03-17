@@ -189,8 +189,6 @@ void imuLoop()
 	
 	dtsum += dt;
     }
-    printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
-    
 }
 
 void init_imu_msg(sensor_msgs::Imu* imu_msg)
@@ -269,6 +267,9 @@ void update_mf_msg(sensor_msgs::MagneticField* mf_msg, InertialSensor* imu)
 
 int main(int argc, char **argv)
 {
+    
+    int printFreq = 0;
+    
 	// The parameter to this function is the running frequency
 	if(argc == 2)
 	{
@@ -326,6 +327,14 @@ int main(int argc, char **argv)
 	{
 		//acquire data
 		imuLoop();
+        
+        
+        if(printFreq>20){
+            printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
+            printFreq = 0;
+        }else{
+            printFreq++;
+        }
 
 		//create messages
 		sensor_msgs::Imu imu_msg;
