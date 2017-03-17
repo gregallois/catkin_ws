@@ -135,6 +135,14 @@ target_link_libraries(remote_multiCtr_KalmanFiltering rcinput)
 target_link_libraries(remote_multiCtr_KalmanFiltering pwm)
 target_link_libraries(remote_multiCtr_KalmanFiltering util)
 
+
+add_executable(remote_multiCtr_Kalman_final src/remote_multiCtr_Kalman_final.cpp)
+target_link_libraries(remote_multiCtr_Kalman_final ${catkin_LIBRARIES})
+target_link_libraries(remote_multiCtr_Kalman_final rcinput)
+target_link_libraries(remote_multiCtr_Kalman_final pwm)
+target_link_libraries(remote_multiCtr_Kalman_final util)
+
+
 add_executable(speed_noise_test src/speed_noise_test.cpp)
 target_link_libraries(speed_noise_test ${catkin_LIBRARIES})
 target_link_libraries(speed_noise_test rcinput)
