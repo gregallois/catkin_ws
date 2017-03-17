@@ -292,7 +292,7 @@
         float inv[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
         float distance;
         
-        substr(point, mean, diff);
+        substr31(point, mean, diff);
         invert33(covariance, inv);
         
         distance = sqrt(diff[1][0]*(inv[0][0]*diff[1][0] + inv[1][0]*diff[2][0] + inv[2][0]*diff[3][0]) + diff[2][0]*(inv[0][1]*diff[1][0] + inv[1][1]*diff[2][0] + inv[2][1]*diff[3][0]) + diff[3][0]*(inv[0][2]*diff[1][0] +inv[1][2]*diff[2][0] + inv[2][2]*diff[3][0]));
@@ -319,7 +319,7 @@
         c[2][2] = a[2][2] + b[2][2];
     }
 
-    void substr22 (float a[3][3], float b[3][3], float c[3][3])
+    void substr33 (float a[3][3], float b[3][3], float c[3][3])
     {
         c[0][0] = a[0][0] - b[0][0];
         c[0][1] = a[0][1] - b[0][1];
@@ -332,14 +332,14 @@
         c[2][2] = a[2][2] - b[2][2];
     }
 
-    void sum21 (float a[3][1], float b[3][1], float c[3][1])
+    void sum31 (float a[3][1], float b[3][1], float c[3][1])
     {
         c[0][0] = a[0][0] + b[0][0];
         c[1][0] = a[1][0] + b[1][0];
         c[2][0] = a[2][0] + b[2][0];
     }
 
-    void substr21 (float a[3][1], float b[3][1], float c[3][1])
+    void substr31 (float a[3][1], float b[3][1], float c[3][1])
     {
         c[0][0] = a[0][0] - b[0][0];
         c[1][0] = a[1][0] - b[1][0];
