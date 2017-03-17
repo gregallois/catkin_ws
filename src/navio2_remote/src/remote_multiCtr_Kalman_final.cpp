@@ -358,13 +358,11 @@
 
 float Kalman_evalX (float x, float v, float alpha, float dt){
     float x2 = x + v*cos(alpha)*dt;
-    printf("x2 : %f, %f, %f\n", v, x, x2);
     return x2;
 }
 
 float Kalman_evalY (float y, float v, float alpha, float dt){
     float y2 = y + v*sin(alpha)*dt;
-    printf("y2 : %f, %f\n", v, y, y2);
     return y2;
 }
 
@@ -562,6 +560,8 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 
 		RollOffset = 0;
 		int initTime = ros::Time::now().sec%1000;
+        
+        int printFreq = 0;
 
 
 		/*******************************************/
@@ -655,9 +655,6 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 //				}
 				double dT = currentTime.toSec()-previousTime.toSec();
 				
-				printf("the time : %d - dt : %f - speed : %f - es_yaw : %f \n es_x : %f - es_y : %f\n" , the_time, dT,currentSpeed,mu_kalman[2][0],mu_kalman[0][0],mu_kalman[1][0]);
-
-                
                 
                 //Prediction step
                 //State Covariance Matrix
@@ -693,6 +690,17 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 					equal31(mu_kk_1,mu_kalman);
 					equal33(P_kk_1,Kalman_P);
 				}
+                
+                
+                
+                if(printFreq>10){
+                    printf("the time : %d - dt : %f - speed : %f - es_yaw : %f \n es_x : %f - es_y : %f\n" , the_time, dT,currentSpeed,mu_kalman[2][0],mu_kalman[0][0],mu_kalman[1][0]);
+                    printFreq = 0;
+                }else{
+                    printFreq++;
+                }
+                
+                
 				
 			}
 		
