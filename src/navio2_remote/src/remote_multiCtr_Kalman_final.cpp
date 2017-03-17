@@ -254,57 +254,6 @@
 		//ROS_INFO("dt: %f - Lat: %f - Lon: %f", dtGPS, GPSLat, GPSLon);
 	}
 
-	float Kalman_evalX (float x, float v, float alpha, float dt){
-		float x2 = x + v*cos(alpha)*dt;
-		return x2;
-	}
-
-	float Kalman_evalY (float y, float v, float alpha, float dt){
-		float y2 = y + v*sin(alpha)*dt;
-		return y2;
-	}
-
-    float Kalman_evalYaw (float yaw, float currentYaw, float oldYaw){
-        float newYaw = yaw + (currentYaw - oldYaw);
-        return newYaw;
-    }
-
-
-
-    void Kalman_eval_State_cov(float newCovariance[3][3], float oldCovariance[3][3], float mu_kalman[3][1], float dt, float v)
-    {
-        float alpha = mu_kalman[2][0];
-        newCovariance[0][0] = oldCovariance[0][0] - sin(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][0]*v*sin(alpha) + dt*Kalman_Q[0][0]*cos(alpha)*cos(alpha)*dt;
-        newCovariance[0][1] = oldCovariance[0][1] + cos(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][1]*v*sin(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*cos(alpha)*dt;
-        newCovariance[0][2] = oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha);
-        newCovariance[1][0] = oldCovariance[1][0] + dt*oldCovariance[2][0]*v*cos(alpha) - sin(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*Kalman_Q[0][0]*cos(alpha)*dt*sin(alpha);
-        newCovariance[1][1] = oldCovariance[1][1] + cos(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*oldCovariance[2][1]*v*cos(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*dt*sin(alpha);
-        newCovariance[1][2] = oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha);
-        newCovariance[2][0] = oldCovariance[2][0] - oldCovariance[2][2]*sin(alpha)*dt*v;
-        newCovariance[2][1] = oldCovariance[2][1] + oldCovariance[2][2]*cos(alpha)*dt*v;
-        newCovariance[2][2] = oldCovariance[2][2] + Kalman_Q[1][1];
-        
-    }
-
-    bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
-    {
-        float diff[3][1] = {{0.0},{0.0}, {0.0}};
-        float inv[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
-        float distance;
-        
-        substr31(point, mean, diff);
-        invert33(covariance, inv);
-        
-        distance = sqrt(diff[1][0]*(inv[0][0]*diff[1][0] + inv[1][0]*diff[2][0] + inv[2][0]*diff[3][0]) + diff[2][0]*(inv[0][1]*diff[1][0] + inv[1][1]*diff[2][0] + inv[2][1]*diff[3][0]) + diff[3][0]*(inv[0][2]*diff[1][0] +inv[1][2]*diff[2][0] + inv[2][2]*diff[3][0]));
-        
-        if(distance > CHI_SQUARE_THRESHOLD)
-        {
-            return false;
-        }
-        
-        return true;
-    }
-
 
     void sum33(float a[3][3], float b[3][3], float c[3][3])
     {
@@ -382,7 +331,7 @@
         c[2][0] = a[2][0]*b[0][0] + a[2][1]*b[1][0] + a[2][2]*b[2][0];
 	}
 
-	void equal31 (float a[2][1], float b[2][1])
+	void equal31(float a[2][1], float b[2][1])
 	{
 
 		b[0][0] = a[0][0];
@@ -390,7 +339,7 @@
         b[2][0] = a[2][0];
 	}
 
-	void equal33 (float a[2][2], float b[2][2])
+	void equal33(float a[2][2], float b[2][2])
 	{
 
 		b[0][0] = a[0][0];
@@ -403,6 +352,60 @@
         b[2][1] = a[2][1];
         b[2][1] = a[2][2];
 	}
+
+
+
+
+float Kalman_evalX (float x, float v, float alpha, float dt){
+    float x2 = x + v*cos(alpha)*dt;
+    return x2;
+}
+
+float Kalman_evalY (float y, float v, float alpha, float dt){
+    float y2 = y + v*sin(alpha)*dt;
+    return y2;
+}
+
+float Kalman_evalYaw (float yaw, float currentYaw, float oldYaw){
+    float newYaw = yaw + (currentYaw - oldYaw);
+    return newYaw;
+}
+
+
+
+void Kalman_eval_State_cov(float newCovariance[3][3], float oldCovariance[3][3], float mu_kalman[3][1], float dt, float v)
+{
+    float alpha = mu_kalman[2][0];
+    newCovariance[0][0] = oldCovariance[0][0] - sin(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][0]*v*sin(alpha) + dt*Kalman_Q[0][0]*cos(alpha)*cos(alpha)*dt;
+    newCovariance[0][1] = oldCovariance[0][1] + cos(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][1]*v*sin(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*cos(alpha)*dt;
+    newCovariance[0][2] = oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha);
+    newCovariance[1][0] = oldCovariance[1][0] + dt*oldCovariance[2][0]*v*cos(alpha) - sin(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*Kalman_Q[0][0]*cos(alpha)*dt*sin(alpha);
+    newCovariance[1][1] = oldCovariance[1][1] + cos(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*oldCovariance[2][1]*v*cos(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*dt*sin(alpha);
+    newCovariance[1][2] = oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha);
+    newCovariance[2][0] = oldCovariance[2][0] - oldCovariance[2][2]*sin(alpha)*dt*v;
+    newCovariance[2][1] = oldCovariance[2][1] + oldCovariance[2][2]*cos(alpha)*dt*v;
+    newCovariance[2][2] = oldCovariance[2][2] + Kalman_Q[1][1];
+    
+}
+
+bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
+{
+    float diff[3][1] = {{0.0},{0.0}, {0.0}};
+    float inv[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
+    float distance;
+    
+    substr31(point, mean, diff);
+    invert33(covariance, inv);
+    
+    distance = sqrt(diff[1][0]*(inv[0][0]*diff[1][0] + inv[1][0]*diff[2][0] + inv[2][0]*diff[3][0]) + diff[2][0]*(inv[0][1]*diff[1][0] + inv[1][1]*diff[2][0] + inv[2][1]*diff[3][0]) + diff[3][0]*(inv[0][2]*diff[1][0] +inv[1][2]*diff[2][0] + inv[2][2]*diff[3][0]));
+    
+    if(distance > CHI_SQUARE_THRESHOLD)
+    {
+        return false;
+    }
+    
+    return true;
+}
 
 	int main(int argc, char **argv)
 	{
