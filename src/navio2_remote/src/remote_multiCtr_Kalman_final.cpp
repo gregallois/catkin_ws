@@ -306,7 +306,7 @@
     }
 
 
-    void sum33 (float a[3][3], float b[3][3], float c[3][3])
+    void sum33(float a[3][3], float b[3][3], float c[3][3])
     {
         c[0][0] = a[0][0] + b[0][0];
         c[0][1] = a[0][1] + b[0][1];
@@ -319,7 +319,7 @@
         c[2][2] = a[2][2] + b[2][2];
     }
 
-    void substr33 (float a[3][3], float b[3][3], float c[3][3])
+    void substr33(float a[3][3], float b[3][3], float c[3][3])
     {
         c[0][0] = a[0][0] - b[0][0];
         c[0][1] = a[0][1] - b[0][1];
@@ -332,14 +332,14 @@
         c[2][2] = a[2][2] - b[2][2];
     }
 
-    void sum31 (float a[3][1], float b[3][1], float c[3][1])
+    void sum31(float a[3][1], float b[3][1], float c[3][1])
     {
         c[0][0] = a[0][0] + b[0][0];
         c[1][0] = a[1][0] + b[1][0];
         c[2][0] = a[2][0] + b[2][0];
     }
 
-    void substr31 (float a[3][1], float b[3][1], float c[3][1])
+    void substr31(float a[3][1], float b[3][1], float c[3][1])
     {
         c[0][0] = a[0][0] - b[0][0];
         c[1][0] = a[1][0] - b[1][0];
@@ -347,7 +347,7 @@
     }
 
 
-	void invert33 (float a[3][3], float b[3][3])
+	void invert33(float a[3][3], float b[3][3])
 	{
         float det = a[0][0]*a[1][1]*a[2][2] - a[0][0]*a[1][2]*a[2][1] - a[0][1]*a[1][0]*a[2][2] + a[0][1]*a[1][2]*a[2][0] + a[0][2]*a[1][0]*a[2][1] - a[0][2]*a[1][1]*a[2][0];
         b[0][0] = 1.0/det* (a[1][1]*a[2][2] - a[1][2]*a[2][1]);
@@ -382,20 +382,26 @@
         c[2][0] = a[2][0]*b[0][0] + a[2][1]*b[1][0] + a[2][2]*b[2][0];
 	}
 
-	void equal21 (float a[2][1], float b[2][1])
+	void equal31 (float a[2][1], float b[2][1])
 	{
 
 		b[0][0] = a[0][0];
 		b[1][0] = a[1][0];
+        b[2][0] = a[2][0];
 	}
 
-	void equal22 (float a[2][2], float b[2][2])
+	void equal33 (float a[2][2], float b[2][2])
 	{
 
 		b[0][0] = a[0][0];
-		b[1][0] = a[1][0];
 		b[0][1] = a[0][1];
+        b[0][2] = a[0][2];
+		b[1][0] = a[1][0];
 		b[1][1] = a[1][1];
+        b[1][2] = a[1][2];
+        b[2][0] = a[2][0];
+        b[2][1] = a[2][1];
+        b[2][1] = a[2][2];
 	}
 
 	int main(int argc, char **argv)
