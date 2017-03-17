@@ -275,18 +275,18 @@
     {
         float alpha = mu_kalman[2][0];
         newCovariance[0][0] = oldCovariance[0][0] - sin(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][0]*v*sin(alpha) + dt*Kalman_Q[0][0]*cos(alpha)*cos(alpha)*dt;
-        newCovariance[0][1] = oldCovariance[0][1] + cos(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][1]*v*sin(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*cos(alpha)*dt
-        newCovariance[0][2] = oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)
-        newCovariance[1][0] = oldCovariance[1][0] + dt*oldCovariance[2][0]*v*cos(alpha) - sin(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*Kalman_Q[0][0]*cos(alpha)*dt*sin(alpha)
-        newCovariance[1][1] = oldCovariance[1][1] + cos(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*oldCovariance[2][1]*v*cos(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*dt*sin(alpha)
-        newCovariance[1][2] = oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)
-        newCovariance[2][0] = oldCovariance[2][0] - oldCovariance[2][2]*sin(alpha)*dt*v
-        newCovariance[2][1] = oldCovariance[2][1] + oldCovariance[2][2]*cos(alpha)*dt*v
+        newCovariance[0][1] = oldCovariance[0][1] + cos(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][1]*v*sin(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*cos(alpha)*dt;
+        newCovariance[0][2] = oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha);
+        newCovariance[1][0] = oldCovariance[1][0] + dt*oldCovariance[2][0]*v*cos(alpha) - sin(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*Kalman_Q[0][0]*cos(alpha)*dt*sin(alpha);
+        newCovariance[1][1] = oldCovariance[1][1] + cos(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*oldCovariance[2][1]*v*cos(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*dt*sin(alpha);
+        newCovariance[1][2] = oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha);
+        newCovariance[2][0] = oldCovariance[2][0] - oldCovariance[2][2]*sin(alpha)*dt*v;
+        newCovariance[2][1] = oldCovariance[2][1] + oldCovariance[2][2]*cos(alpha)*dt*v;
         newCovariance[2][2] = oldCovariance[2][2] + Kalman_Q[1][1];
         
     }
 
-    void checkOutlier(float covariance[3][3], mean[3][1], point[3][1])
+    bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
     {
         float diff[3][1] = {{0.0},{0.0}, {0.0}};
         float inv[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
@@ -306,7 +306,7 @@
     }
 
 
-	void matrix_sum (float a[][], float b[][], float c[][], int size1, int size2)
+	void matrix_sum (float *a, float *b, float *c, int size1, int size2)
 	{
         int i;
         int j;
@@ -317,7 +317,7 @@
         }
 	}
 
-    void matrix_substr(float a[][], float b[][], float c[][], int size1, int size2)
+    void matrix_substr(float *a, float *b, float *c, int size1, int size2)
     {
         int i;
         int j;
