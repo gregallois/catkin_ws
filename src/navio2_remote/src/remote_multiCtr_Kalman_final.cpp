@@ -646,14 +646,14 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 			if (the_time>35)
 			{
 
-				if (first_gps == 0) //initialize the first value of GPS for position to Kalman (assuming we leave from the ground station)
-				{
-                    printf("OM DEVVRQIT PASSSSSSSS\n");
-					mu_kalman[0][0] = 0;
-					mu_kalman[1][0] = 0;
-					first_gps == 1;
-
-				}
+//				if (first_gps == 0) //initialize the first value of GPS for position to Kalman (assuming we leave from the ground station)
+//				{
+//                    printf("OM DEVRAIT PAS\n");
+//					mu_kalman[0][0] = 0;
+//					mu_kalman[1][0] = 0;
+//					first_gps == 1;
+//
+//				}
 				double dT = currentTime.toSec()-previousTime.toSec();
 				
 				printf("the time : %d - dt : %f - speed : %f - es_yaw : %f \n es_x : %f - es_y : %f\n" , the_time, dT,currentSpeed,mu_kalman[2][0],mu_kalman[0][0],mu_kalman[1][0]);
@@ -669,18 +669,15 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                 mu_kk_1[2][0] = Kalman_evalYaw(mu_kalman[2][0], currentYaw, oldYaw);
 				mu_kk_1[0][0] = Kalman_evalX(mu_kalman[0][0], currentSpeed, mu_kk_1[2][0], (float)dT);
                 mu_kk_1[0][0] = Kalman_evalY(mu_kalman[1][0], currentSpeed, mu_kk_1[2][0], (float)dT);
-                
-                printf("mu_kk_1): %f, &f\n", mu_kk_1[0][0], mu_kk_1[1][0]);
                 oldYaw = currentYaw;
-                
                 
 
 				if (GPS_data_rec > Update_phase && currentSpeed > 2.0) //We do not perform updates at zero speed (in such a case, IMU much more precise)
 				{
-                    printf("###########GPS UPDATE############\n");
+
                     //if GPS measurement in an outlier, we do nothing, else we update
                     if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
-                        
+                        printf("###########GPS UPDATE############\n");
                         substr31(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
                     
                         sum33(P_kk_1,Kalman_R,Kalman_S); //S = H*P_kk_1*H'+ R;
@@ -705,7 +702,6 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 				else{
 					equal31(mu_kk_1,mu_kalman);
 					equal33(P_kk_1,Kalman_P);
-                    printf("mu_kalman): %f, &f\n", mu_kalman[0][0], mu_kalman[1][0]);
 				}
 				
 			}
