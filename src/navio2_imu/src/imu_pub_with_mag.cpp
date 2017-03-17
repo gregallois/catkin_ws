@@ -327,18 +327,13 @@ int main(int argc, char **argv)
 	{
 		//acquire data
 		imuLoop();
-<<<<<<< HEAD
-                printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
-=======
-        
-        
+
         if(printFreq>20){
             printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
             printFreq = 0;
         }else{
             printFreq++;
         }
->>>>>>> 28356f77b94e9ef763d73cabf77c7979f9084849
 
 		//create messages
 		sensor_msgs::Imu imu_msg;
