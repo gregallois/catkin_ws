@@ -306,26 +306,44 @@
     }
 
 
-	void matrix_sum (float *a, float *b, float *c, int size1, int size2)
-	{
-        int i;
-        int j;
-        for(i=0; i<size1; i++){
-            for(j=0; j<size2; j++){
-                c[i][j] = a[i][j] + b[i][j]
-            }
-        }
-	}
-
-    void matrix_substr(float *a, float *b, float *c, int size1, int size2)
+    void sum33 (float a[3][3], float b[3][3], float c[3][3])
     {
-        int i;
-        int j;
-        for(i=0; i<size1; i++){
-            for(j=0; j<size2; j++){
-                c[i][j] = a[i][j] - b[i][j]
-            }
-        }
+        c[0][0] = a[0][0] + b[0][0];
+        c[0][1] = a[0][1] + b[0][1];
+        c[0][2] = a[0][2] + b[0][2];
+        c[1][0] = a[1][0] + b[1][0];
+        c[1][1] = a[1][1] + b[1][1];
+        c[1][2] = a[1][2] + b[1][2];
+        c[2][0] = a[2][0] + b[2][0];
+        c[2][1] = a[2][1] + b[2][1];
+        c[2][2] = a[2][2] + b[2][2];
+    }
+
+    void substr22 (float a[3][3], float b[3][3], float c[3][3])
+    {
+        c[0][0] = a[0][0] - b[0][0];
+        c[0][1] = a[0][1] - b[0][1];
+        c[0][2] = a[0][2] - b[0][2];
+        c[1][0] = a[1][0] - b[1][0];
+        c[1][1] = a[1][1] - b[1][1];
+        c[1][2] = a[1][2] - b[1][2];
+        c[2][0] = a[2][0] - b[2][0];
+        c[2][1] = a[2][1] - b[2][1];
+        c[2][2] = a[2][2] - b[2][2];
+    }
+
+    void sum21 (float a[3][1], float b[3][1], float c[3][1])
+    {
+        c[0][0] = a[0][0] + b[0][0];
+        c[1][0] = a[1][0] + b[1][0];
+        c[2][0] = a[2][0] + b[2][0];
+    }
+
+    void substr21 (float a[3][1], float b[3][1], float c[3][1])
+    {
+        c[0][0] = a[0][0] - b[0][0];
+        c[1][0] = a[1][0] - b[1][0];
+        c[2][0] = a[2][0] - b[2][0];
     }
 
 
