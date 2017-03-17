@@ -668,7 +668,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                 //State estimation
                 mu_kk_1[2][0] = Kalman_evalYaw(mu_kalman[2][0], currentYaw, oldYaw);
 				mu_kk_1[0][0] = Kalman_evalX(mu_kalman[0][0], currentSpeed, mu_kk_1[2][0], (float)dT);
-				mu_kk_1[0][0 = Kalman_evalY(mu_kalman[1][0], currentSpeed, mu_kk_1[2][0], (float)dT);
+                mu_kk_1[0][0] = Kalman_evalY(mu_kalman[1][0], currentSpeed, mu_kk_1[2][0], (float)dT);
                 
                 printf("mu_kk_1): %f, &f\n", mu_kk_1[0][0], mu_kk_1[1][0]);
                 oldYaw = currentYaw;
