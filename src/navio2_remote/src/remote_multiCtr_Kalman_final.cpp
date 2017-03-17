@@ -331,7 +331,7 @@
         c[2][0] = a[2][0]*b[0][0] + a[2][1]*b[1][0] + a[2][2]*b[2][0];
 	}
 
-	void equal31(float a[2][1], float b[2][1])
+	void equal31(float a[3][1], float b[3][1])
 	{
 
 		b[0][0] = a[0][0];
@@ -339,7 +339,7 @@
         b[2][0] = a[2][0];
 	}
 
-	void equal33(float a[2][2], float b[2][2])
+	void equal33(float a[3][3], float b[3][3])
 	{
 
 		b[0][0] = a[0][0];
