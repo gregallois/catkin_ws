@@ -18,6 +18,7 @@
 /home/pi/catkin_ws/build/navio2_remote/CMakeFiles/pwm.dir
 /home/pi/catkin_ws/build/navio2_remote/CMakeFiles/rcinput.dir
 /home/pi/catkin_ws/build/navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir
+/home/pi/catkin_ws/build/navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/roscpp_generate_messages_cpp.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/roscpp_generate_messages_lisp.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/roscpp_generate_messages_py.dir

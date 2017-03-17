@@ -186,6 +186,20 @@ remote_multiCtr_KalmanFiltering/fast:
 .PHONY : remote_multiCtr_KalmanFiltering/fast
 
 # Convenience name for target.
+navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/rule:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/rule
+.PHONY : navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/rule
+
+# Convenience name for target.
+remote_multiCtr_Kalman_final: navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/rule
+.PHONY : remote_multiCtr_Kalman_final
+
+# fast build rule for target.
+remote_multiCtr_Kalman_final/fast:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/build
+.PHONY : remote_multiCtr_Kalman_final/fast
+
+# Convenience name for target.
 navio2_remote/CMakeFiles/speed_noise_test.dir/rule:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_remote/CMakeFiles/speed_noise_test.dir/rule
 .PHONY : navio2_remote/CMakeFiles/speed_noise_test.dir/rule
@@ -309,6 +323,30 @@ src/remote_multiCtr_KalmanFiltering.cpp.s:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/src/remote_multiCtr_KalmanFiltering.cpp.s
 .PHONY : src/remote_multiCtr_KalmanFiltering.cpp.s
 
+src/remote_multiCtr_Kalman_final.o: src/remote_multiCtr_Kalman_final.cpp.o
+.PHONY : src/remote_multiCtr_Kalman_final.o
+
+# target to build an object file
+src/remote_multiCtr_Kalman_final.cpp.o:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/src/remote_multiCtr_Kalman_final.cpp.o
+.PHONY : src/remote_multiCtr_Kalman_final.cpp.o
+
+src/remote_multiCtr_Kalman_final.i: src/remote_multiCtr_Kalman_final.cpp.i
+.PHONY : src/remote_multiCtr_Kalman_final.i
+
+# target to preprocess a source file
+src/remote_multiCtr_Kalman_final.cpp.i:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/src/remote_multiCtr_Kalman_final.cpp.i
+.PHONY : src/remote_multiCtr_Kalman_final.cpp.i
+
+src/remote_multiCtr_Kalman_final.s: src/remote_multiCtr_Kalman_final.cpp.s
+.PHONY : src/remote_multiCtr_Kalman_final.s
+
+# target to generate assembly for a file
+src/remote_multiCtr_Kalman_final.cpp.s:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_Kalman_final.dir/src/remote_multiCtr_Kalman_final.cpp.s
+.PHONY : src/remote_multiCtr_Kalman_final.cpp.s
+
 src/speed_noise_test.o: src/speed_noise_test.cpp.o
 .PHONY : src/speed_noise_test.o
 
@@ -347,6 +385,7 @@ help:
 	@echo "... rcinput"
 	@echo "... rebuild_cache"
 	@echo "... remote_multiCtr_KalmanFiltering"
+	@echo "... remote_multiCtr_Kalman_final"
 	@echo "... speed_noise_test"
 	@echo "... test"
 	@echo "... util"
@@ -362,6 +401,9 @@ help:
 	@echo "... src/remote_multiCtr_KalmanFiltering.o"
 	@echo "... src/remote_multiCtr_KalmanFiltering.i"
 	@echo "... src/remote_multiCtr_KalmanFiltering.s"
+	@echo "... src/remote_multiCtr_Kalman_final.o"
+	@echo "... src/remote_multiCtr_Kalman_final.i"
+	@echo "... src/remote_multiCtr_Kalman_final.s"
 	@echo "... src/speed_noise_test.o"
 	@echo "... src/speed_noise_test.i"
 	@echo "... src/speed_noise_test.s"
