@@ -698,8 +698,8 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 				}
 
 				else{
-					equal21(mu_kk_1,mu_kalman);
-					equal22(P_kk_1,Kalman_P);
+					equal31(mu_kk_1,mu_kalman);
+					equal33(P_kk_1,Kalman_P);
 				}
 				
 			}
