@@ -292,7 +292,7 @@
         float inv[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
         float distance;
         
-        matrix_substr(point, mean, diff, 3, 1);
+        substr(point, mean, diff);
         invert33(covariance, inv);
         
         distance = sqrt(diff[1][0]*(inv[0][0]*diff[1][0] + inv[1][0]*diff[2][0] + inv[2][0]*diff[3][0]) + diff[2][0]*(inv[0][1]*diff[1][0] + inv[1][1]*diff[2][0] + inv[2][1]*diff[3][0]) + diff[3][0]*(inv[0][2]*diff[1][0] +inv[1][2]*diff[2][0] + inv[2][2]*diff[3][0]));
@@ -667,9 +667,9 @@
                     //if GPS measurement in an outlier, we do nothing, else we update
                     if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
                         
-                        matrix_substr(z_gps,mu_kk_1,ybar, 3, 1); //ybar = z - H*mu_kk_1;
+                        substr31(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
                     
-                        matrix_sum(P_kk_1,Kalman_R,Kalman_S, 3, 3); //S = H*P_kk_1*H'+ R;
+                        sum33(P_kk_1,Kalman_R,Kalman_S); //S = H*P_kk_1*H'+ R;
                         
                         invert33(Kalman_S,Kalman_S_inv); //S^-1
                         
@@ -677,9 +677,9 @@
                         
                         multip33by31(Kalman_K,ybar,Kalman_K_ybar); //K*ybar;
                         
-                        matrix_sum(mu_kk_1,Kalman_K_ybar,mu_kalman, 3, 1); //mu_kalman = mu_kk_1 + K*ybar;
+                        sum31(mu_kk_1,Kalman_K_ybar,mu_kalman); //mu_kalman = mu_kk_1 + K*ybar;
                         
-                        matrix_substr(Kalman_eye,Kalman_K,Kalman_eye_min_K, 3, 3);//(eye(2)-K*H)
+                        substr33(Kalman_eye,Kalman_K,Kalman_eye_min_K);//(eye(2)-K*H)
                         
                         multip33by33(Kalman_eye_min_K,P_kk_1,Kalman_P);//P = (eye(2)-K*H)*P_kk_1;
                         
