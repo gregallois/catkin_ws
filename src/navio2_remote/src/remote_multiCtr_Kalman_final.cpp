@@ -358,11 +358,13 @@
 
 float Kalman_evalX (float x, float v, float alpha, float dt){
     float x2 = x + v*cos(alpha)*dt;
+    printf("x2 : %f, %f, %f\n", v, x, x2);
     return x2;
 }
 
 float Kalman_evalY (float y, float v, float alpha, float dt){
     float y2 = y + v*sin(alpha)*dt;
+    printf("y2 : %f, %f\n", v, y, y2);
     return y2;
 }
 
