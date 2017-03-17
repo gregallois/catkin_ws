@@ -177,8 +177,6 @@ void imuLoop()
 	    //------------------------ Read Euler angles ------------------------------
 
 	    ahrs.getEuler(&pitch, &roll, &yaw);
-        printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
-
 
 	    //------------------- Discard the time of the first cycle -----------------
 
@@ -191,8 +189,7 @@ void imuLoop()
 	
 	dtsum += dt;
     }
-
-
+    printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
     
 }
 

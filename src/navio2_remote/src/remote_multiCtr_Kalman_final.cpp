@@ -400,7 +400,6 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
     invert33(covariance, inv);
     
     distance = sqrt(diff[1][0]*(inv[0][0]*diff[1][0] + inv[1][0]*diff[2][0] + inv[2][0]*diff[3][0]) + diff[2][0]*(inv[0][1]*diff[1][0] + inv[1][1]*diff[2][0] + inv[2][1]*diff[3][0]) + diff[3][0]*(inv[0][2]*diff[1][0] +inv[1][2]*diff[2][0] + inv[2][2]*diff[3][0]));
-    
     if(distance > CHI_SQUARE_THRESHOLD)
     {
         return false;
@@ -642,7 +641,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 			//neglect the curvature of earth by applying coeff to convert lat/lon in x/y
 			
 			
-			if (the_time<=35) printf("the time : %d - Calibration (Roll = 0 , Yaw = 180) \n" , the_time);
+			if (the_time<=35) printf("the time : %d Wait during IMU calibration\n" , the_time);
 			if (the_time>35)
 			{
 
@@ -668,7 +667,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                 //State estimation
                 mu_kk_1[2][0] = Kalman_evalYaw(mu_kalman[2][0], currentYaw, oldYaw);
 				mu_kk_1[0][0] = Kalman_evalX(mu_kalman[0][0], currentSpeed, mu_kk_1[2][0], (float)dT);
-                mu_kk_1[0][0] = Kalman_evalY(mu_kalman[1][0], currentSpeed, mu_kk_1[2][0], (float)dT);
+                mu_kk_1[1][0] = Kalman_evalY(mu_kalman[1][0], currentSpeed, mu_kk_1[2][0], (float)dT);
                 oldYaw = currentYaw;
                 
 
@@ -677,23 +676,14 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 
                     //if GPS measurement in an outlier, we do nothing, else we update
                     if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
-                        printf("###########GPS UPDATE############\n");
                         substr31(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
-                    
                         sum33(P_kk_1,Kalman_R,Kalman_S); //S = H*P_kk_1*H'+ R;
-                        
                         invert33(Kalman_S,Kalman_S_inv); //S^-1
-                        
                         multip33by33(P_kk_1,Kalman_S_inv,Kalman_K); //K = P_kk_1*H'*S^(-1)
-                        
                         multip33by31(Kalman_K,ybar,Kalman_K_ybar); //K*ybar;
-                        
                         sum31(mu_kk_1,Kalman_K_ybar,mu_kalman); //mu_kalman = mu_kk_1 + K*ybar;
-                        
                         substr33(Kalman_eye,Kalman_K,Kalman_eye_min_K);//(eye(2)-K*H)
-                        
                         multip33by33(Kalman_eye_min_K,P_kk_1,Kalman_P);//P = (eye(2)-K*H)*P_kk_1;
-                        
                         Update_phase = GPS_data_rec;
                         
                     }
