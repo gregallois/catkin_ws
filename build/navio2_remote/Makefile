@@ -186,6 +186,20 @@ remote_multiCtr_KalmanFiltering/fast:
 .PHONY : remote_multiCtr_KalmanFiltering/fast
 
 # Convenience name for target.
+navio2_remote/CMakeFiles/speed_noise_test.dir/rule:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_remote/CMakeFiles/speed_noise_test.dir/rule
+.PHONY : navio2_remote/CMakeFiles/speed_noise_test.dir/rule
+
+# Convenience name for target.
+speed_noise_test: navio2_remote/CMakeFiles/speed_noise_test.dir/rule
+.PHONY : speed_noise_test
+
+# fast build rule for target.
+speed_noise_test/fast:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/speed_noise_test.dir/build.make navio2_remote/CMakeFiles/speed_noise_test.dir/build
+.PHONY : speed_noise_test/fast
+
+# Convenience name for target.
 navio2_remote/CMakeFiles/util.dir/rule:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_remote/CMakeFiles/util.dir/rule
 .PHONY : navio2_remote/CMakeFiles/util.dir/rule
@@ -295,6 +309,30 @@ src/remote_multiCtr_KalmanFiltering.cpp.s:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/build.make navio2_remote/CMakeFiles/remote_multiCtr_KalmanFiltering.dir/src/remote_multiCtr_KalmanFiltering.cpp.s
 .PHONY : src/remote_multiCtr_KalmanFiltering.cpp.s
 
+src/speed_noise_test.o: src/speed_noise_test.cpp.o
+.PHONY : src/speed_noise_test.o
+
+# target to build an object file
+src/speed_noise_test.cpp.o:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/speed_noise_test.dir/build.make navio2_remote/CMakeFiles/speed_noise_test.dir/src/speed_noise_test.cpp.o
+.PHONY : src/speed_noise_test.cpp.o
+
+src/speed_noise_test.i: src/speed_noise_test.cpp.i
+.PHONY : src/speed_noise_test.i
+
+# target to preprocess a source file
+src/speed_noise_test.cpp.i:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/speed_noise_test.dir/build.make navio2_remote/CMakeFiles/speed_noise_test.dir/src/speed_noise_test.cpp.i
+.PHONY : src/speed_noise_test.cpp.i
+
+src/speed_noise_test.s: src/speed_noise_test.cpp.s
+.PHONY : src/speed_noise_test.s
+
+# target to generate assembly for a file
+src/speed_noise_test.cpp.s:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_remote/CMakeFiles/speed_noise_test.dir/build.make navio2_remote/CMakeFiles/speed_noise_test.dir/src/speed_noise_test.cpp.s
+.PHONY : src/speed_noise_test.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -309,6 +347,7 @@ help:
 	@echo "... rcinput"
 	@echo "... rebuild_cache"
 	@echo "... remote_multiCtr_KalmanFiltering"
+	@echo "... speed_noise_test"
 	@echo "... test"
 	@echo "... util"
 	@echo "... src/PWM.o"
@@ -323,6 +362,9 @@ help:
 	@echo "... src/remote_multiCtr_KalmanFiltering.o"
 	@echo "... src/remote_multiCtr_KalmanFiltering.i"
 	@echo "... src/remote_multiCtr_KalmanFiltering.s"
+	@echo "... src/speed_noise_test.o"
+	@echo "... src/speed_noise_test.i"
+	@echo "... src/speed_noise_test.s"
 .PHONY : help
 
 

@@ -177,8 +177,6 @@ void imuLoop()
 	    //------------------------ Read Euler angles ------------------------------
 
 	    ahrs.getEuler(&pitch, &roll, &yaw);
-        printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
-
 
 	    //------------------- Discard the time of the first cycle -----------------
 
@@ -329,6 +327,7 @@ int main(int argc, char **argv)
 	{
 		//acquire data
 		imuLoop();
+                printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
 
 		//create messages
 		sensor_msgs::Imu imu_msg;

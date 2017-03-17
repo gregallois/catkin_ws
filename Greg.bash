@@ -45,7 +45,7 @@ tmux send-keys "cd /home/pi/bagfiles" C-m
 tmux send-keys "rosbag record -a" C-m
 
 #log files, eric's code and gps launch
-if [ "$#" -eq 1 ] && [ "$1" == 'motor' ]
+elif [ "$#" -eq 1 ] && [ "$1" == 'motor' ]
 then
 echo "Here we go in auto mode and gps information (log recorded): freq= 50, MaxThrottlePwm=1600, Kp=0.7, Ki=0.2, Kd=0.2"
 sleep 2
@@ -84,8 +84,6 @@ tmux send-keys "sleep 15" C-m                                       #no needs to
 tmux send-keys "source /home/pi/catkin_ws/devel/setup.bash" C-m
 tmux send-keys "cd /home/pi/bagfiles" C-m
 tmux send-keys "rosbag record -a" C-m
-
-
 
 elif [ "$#" -eq 1 ] && [ "$1" == 'all' ]
 then
@@ -132,7 +130,3 @@ tmux select-window -t $SESSION:1
 
 # Attach to session
 tmux -2 attach-session -t $SESSION
-
-
-
-

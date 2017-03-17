@@ -599,6 +599,19 @@ remote_multiCtr_KalmanFiltering/fast:
 .PHONY : remote_multiCtr_KalmanFiltering/fast
 
 #=============================================================================
+# Target rules for targets named speed_noise_test
+
+# Build rule for target.
+speed_noise_test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 speed_noise_test
+.PHONY : speed_noise_test
+
+# fast build rule for target.
+speed_noise_test/fast:
+	$(MAKE) -f navio2_remote/CMakeFiles/speed_noise_test.dir/build.make navio2_remote/CMakeFiles/speed_noise_test.dir/build
+.PHONY : speed_noise_test/fast
+
+#=============================================================================
 # Target rules for targets named util
 
 # Build rule for target.
@@ -658,6 +671,7 @@ help:
 	@echo "... pwm"
 	@echo "... rcinput"
 	@echo "... remote_multiCtr_KalmanFiltering"
+	@echo "... speed_noise_test"
 	@echo "... util"
 .PHONY : help
 

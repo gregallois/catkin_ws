@@ -28,6 +28,7 @@
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/sensor_msgs_generate_messages_cpp.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/sensor_msgs_generate_messages_lisp.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/sensor_msgs_generate_messages_py.dir
+/home/pi/catkin_ws/build/navio2_remote/CMakeFiles/speed_noise_test.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/std_msgs_generate_messages_cpp.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/std_msgs_generate_messages_lisp.dir
 /home/pi/catkin_ws/build/gps_rtk/CMakeFiles/std_msgs_generate_messages_py.dir

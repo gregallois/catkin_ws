@@ -10,8 +10,8 @@
 	#include "sensor_msgs/NavSatFix.h"
 	#include <sstream>
 
-    //Constant speed objective
-    #define TARGET_PWM 1574
+	//Constant speed objective
+        #define TARGET_PWM 1550
 
 	//PWM Pins on Navio2
 	#define MOTOR_PWM_OUT 9
@@ -520,7 +520,7 @@
 
 			//calculate output to motor from pid controller
 			motor_input = TARGET_PWM; // pid_Motor_Output(desired_speed);
-
+			printf("input : %f\n", (float)TARGET_PWM);
 			//calculate output to servo from pid controller
 			servo_input = pid_Servo_Output(pid_Ref_Output(desired_roll));
 			
