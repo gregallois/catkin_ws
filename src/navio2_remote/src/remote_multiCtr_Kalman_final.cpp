@@ -620,7 +620,6 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 			//write readings on pwm output
 			motor.set_duty_cycle(MOTOR_PWM_OUT, ((float)motor_input)/1000.0f); 
 			servo.set_duty_cycle(SERVO_PWM_OUT, ((float)servo_input)/1000.0f);
-			printf("motor_input : %f, desired : %f, %f\n", (float)motor_input, desired_speed, (float)desired_pwm);
 			//Measure time for initial roll calibration
 			the_time = ros::Time::now().sec%1000-initTime;
 
@@ -641,8 +640,8 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 			//neglect the curvature of earth by applying coeff to convert lat/lon in x/y
 			
 			
-			if (the_time<=30) printf("the time : %d - Calibration (Roll = 0 , Yaw = 180) \n" , the_time);
-			if (the_time>30)
+			if (the_time<=35) printf("the time : %d - Calibration (Roll = 0 , Yaw = 180) \n" , the_time);
+			if (the_time>35)
 			{
 
 				if (first_gps == 0) //initialize the first value of GPS for position to Kalman (assuming we leave from the ground station)
@@ -654,7 +653,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 				}
 				double dT = currentTime.toSec()-previousTime.toSec();
 				
-				printf("the time : %d - dt : %f - speed : %f - yaw : %f \n es_x : %f - es_y : %f\n" , the_time, dT,currentSpeed,currentYaw,mu_kalman[0][0],mu_kalman[0][1]);
+				printf("the time : %d - dt : %f - speed : %f - es_yaw : %f \n es_x : %f - es_y : %f\n" , the_time, dT,currentSpeed,mu_kalman[2][0],mu_kalman[0][0],mu_kalman[1][0]);
 
                 
                 
@@ -672,7 +671,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 
 				if (GPS_data_rec > Update_phase && currentSpeed > 2.0) //We do not perform updates at zero speed (in such a case, IMU much more precise)
 				{
-                    
+                    printf("###########GPS UPDATE############\n");
                     //if GPS measurement in an outlier, we do nothing, else we update
                     if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
                         
