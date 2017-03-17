@@ -189,8 +189,7 @@ void imuLoop()
 	
 	dtsum += dt;
     }
-
-
+    printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
     
 }
 
