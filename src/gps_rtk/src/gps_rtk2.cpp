@@ -39,7 +39,7 @@ void update_gps_msg(sensor_msgs::NavSatFix* gps_msg, float pos_data[3])
     float newY_GPS = (pos_data[0] - base_lat)*1111.6/10000*1e6;
 
 
-	ROS_INFO("GPS : X : = %.8f, Y = %.8f", newX_GPS, newY_GPS);
+	printf("GPS : X : = %.8f, Y = %.8f", newX_GPS, newY_GPS);
 }
 
 int main(int argc, char *argv[])
