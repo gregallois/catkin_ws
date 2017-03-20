@@ -56,14 +56,14 @@
 	double currentTimeGPS;
 	double previousTimeGPS;
 	double dtGPS; 
-	float base_lat; //= 46.51849177;
-	float base_lon; // = 6.56666458;
+	float base_lat = 46.51849177;
+	float base_lon = 6.56666458;
 	int GPS_data_rec = 0; 
 	int Update_phase = 0;
 	int first_gps = 0;
 
 	//Variables for Kalman
-	float Kalman_P[3][3] = {{0.5, 0.0, 0.0},{0.5, 0.0, 0.0}, {0.0, 0.0, 0.05}};
+	float Kalman_P[3][3] = {{0.5, 0.0, 0.0},{0, 0.5, 0.0}, {0.0, 0.0, 0.05}};
 	float Kalman_Q[2][2] = {{0.02, 0.0},{0.0, 0.007}};
 	float Kalman_R[3][3] = {{150, 0.0, 0.0},{0.0, 150, 0.0}, {0.0, 0.0, 300}};
 	float Kalman_S[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
@@ -296,26 +296,26 @@
     }
 
 
-	void invert33(float a[3][3], float b[3][3])
-	{
-        float det = a[0][0]*a[1][1]*a[2][2] - a[0][0]*a[1][2]*a[2][1] - a[0][1]*a[1][0]*a[2][2] + a[0][1]*a[1][2]*a[2][0] + a[0][2]*a[1][0]*a[2][1] - a[0][2]*a[1][1]*a[2][0];
+    void invert33(float a[3][3], float b[3][3])
+    {
+        float det = a[0][0]*a[1][1]*a[2][2] - a[0][0]*a[1][2]*a[2][1] - a[0][1]*a[1][0]*a[2][2] + a[0][1]*a[1][2]*a[2][0] + a[0][2]*    a[1][0]*a[2][1] - a[0][2]*a[1][1]*a[2][0];
         b[0][0] = 1.0/det* (a[1][1]*a[2][2] - a[1][2]*a[2][1]);
-		b[0][1] = 1.0/det* (a[0][2]*a[2][1] - a[0][1]*a[2][2]);
-		b[0][2] = 1.0/det* (a[0][1]*a[1][2] - a[0][2]*a[1][1]);
+        b[0][1] = 1.0/det* (a[0][2]*a[2][1] - a[0][1]*a[2][2]);
+        b[0][2] = 1.0/det* (a[0][1]*a[1][2] - a[0][2]*a[1][1]);
         b[1][0] = 1.0/det* (a[1][2]*a[2][0] - a[1][0]*a[2][2]);
         b[1][1] = 1.0/det* (a[0][0]*a[2][2] - a[0][2]*a[2][0]);
         b[1][2] = 1.0/det* (a[0][2]*a[1][0] - a[0][0]*a[1][2]);
         b[2][0] = 1.0/det* (a[1][0]*a[2][1] - a[1][1]*a[2][0]);
         b[2][1] = 1.0/det* (a[0][1]*a[2][0] - a[0][0]*a[2][1]);
         b[2][2] = 1.0/det* (a[0][0]*a[1][1] - a[0][1]*a[1][0]);
-	}
+    }
 
-	void multip33by33 (float a[3][3], float b[3][3], float c[3][3])
-	{
-
-		c[0][0] = a[0][0]*b[0][0] + a[0][1]*b[1][0] + a[0][2]*b[2][0];
-		c[0][1] = a[0][0]*b[0][1] + a[0][1]*b[1][1] + a[0][2]*b[2][1];
-		c[0][2] = a[0][0]*b[0][2] + a[0][1]*b[1][2] + a[0][2]*b[2][2];
+    void multip33by33 (float a[3][3], float b[3][3], float c[3][3])
+    {
+    
+        c[0][0] = a[0][0]*b[0][0] + a[0][1]*b[1][0] + a[0][2]*b[2][0];
+        c[0][1] = a[0][0]*b[0][1] + a[0][1]*b[1][1] + a[0][2]*b[2][1];
+        c[0][2] = a[0][0]*b[0][2] + a[0][1]*b[1][2] + a[0][2]*b[2][2];
         c[1][0] = a[1][0]*b[0][0] + a[1][1]*b[1][0] + a[1][2]*b[2][0];
         c[1][1] = a[1][0]*b[0][1] + a[1][1]*b[1][1] + a[1][2]*b[2][1];
         c[1][2] = a[1][0]*b[0][2] + a[1][1]*b[1][2] + a[1][2]*b[2][2];
@@ -350,7 +350,7 @@
         b[1][2] = a[1][2];
         b[2][0] = a[2][0];
         b[2][1] = a[2][1];
-        b[2][1] = a[2][2];
+        b[2][2] = a[2][2];
 	}
 
 
@@ -372,7 +372,6 @@ float Kalman_evalYaw (float yaw, float currentYaw, float oldYaw){
 }
 
 
-
 void Kalman_eval_State_cov(float newCovariance[3][3], float oldCovariance[3][3], float mu_kalman[3][1], float dt, float v)
 {
     float alpha = mu_kalman[2][0];
@@ -380,6 +379,7 @@ void Kalman_eval_State_cov(float newCovariance[3][3], float oldCovariance[3][3],
     newCovariance[0][1] = oldCovariance[0][1] + cos(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][1]*v*sin(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*cos(alpha)*dt;
     newCovariance[0][2] = oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha);
     newCovariance[1][0] = oldCovariance[1][0] + dt*oldCovariance[2][0]*v*cos(alpha) - sin(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*Kalman_Q[0][0]*cos(alpha)*dt*sin(alpha);
+    
     newCovariance[1][1] = oldCovariance[1][1] + cos(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*oldCovariance[2][1]*v*cos(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*dt*sin(alpha);
     newCovariance[1][2] = oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha);
     newCovariance[2][0] = oldCovariance[2][0] - oldCovariance[2][2]*sin(alpha)*dt*v;
@@ -395,9 +395,10 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
     float distance;
     
     substr31(point, mean, diff);
+    
     invert33(covariance, inv);
     
-    distance = sqrt(diff[1][0]*(inv[0][0]*diff[1][0] + inv[1][0]*diff[2][0] + inv[2][0]*diff[3][0]) + diff[2][0]*(inv[0][1]*diff[1][0] + inv[1][1]*diff[2][0] + inv[2][1]*diff[3][0]) + diff[3][0]*(inv[0][2]*diff[1][0] +inv[1][2]*diff[2][0] + inv[2][2]*diff[3][0]));
+    distance = diff[0][0]*(inv[0][0]*diff[0][0] + inv[1][0]*diff[1][0] + inv[2][0]*diff[2][0]) + diff[1][0]*(inv[0][1]*diff[0][0] + inv[1][1]*diff[1][0] + inv[2][1]*diff[2][0]) + diff[2][0]*(inv[0][2]*diff[0][0] +inv[1][2]*diff[1][0] + inv[2][2]*diff[2][0]);
     if(distance > CHI_SQUARE_THRESHOLD)
     {
         return false;
@@ -645,14 +646,6 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 			if (the_time>35)
 			{
 
-//				if (first_gps == 0) //initialize the first value of GPS for position to Kalman (assuming we leave from the ground station)
-//				{
-//                    printf("OM DEVRAIT PAS\n");
-//					mu_kalman[0][0] = 0;
-//					mu_kalman[1][0] = 0;
-//					first_gps == 1;
-//
-//				}
 				double dT = currentTime.toSec()-previousTime.toSec();
 				
                 
@@ -672,7 +665,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 				{
 
                     //if GPS measurement in an outlier, we do nothing, else we update
-                    //if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
+                    if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
                         substr31(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
                         sum33(P_kk_1,Kalman_R,Kalman_S); //S = H*P_kk_1*H'+ R;
                         invert33(Kalman_S,Kalman_S_inv); //S^-1
@@ -683,7 +676,12 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                         multip33by33(Kalman_eye_min_K,P_kk_1,Kalman_P);//P = (eye(2)-K*H)*P_kk_1;
                         Update_phase = GPS_data_rec;
                         
-                    //}
+                    }
+                    else
+                    {
+                        equal31(mu_kk_1,mu_kalman);
+                        equal33(P_kk_1,Kalman_P);
+                    }
 				}
 
 				else{
@@ -693,8 +691,8 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                 
                 
                 
-                if(printFreq>10){
-                    printf("the time : %d - dt : %f - speed : %f - es_yaw : %f \n es_x : %f - es_y : %f\n" , the_time, dT,currentSpeed,mu_kalman[2][0],mu_kalman[0][0],mu_kalman[1][0]);
+                if(printFreq>2){
+                    printf("the time : %d - dt : %f - speed : %f - yaw : %f \n x : %f - y : %f\n" , the_time, dT,currentSpeed,mu_kalman[2][0],mu_kalman[0][0],mu_kalman[1][0]);
                     printFreq = 0;
                 }else{
                     printFreq++;
