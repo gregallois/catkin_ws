@@ -666,6 +666,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 
                     //if GPS measurement in an outlier, we do nothing, else we update
                     if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
+                        printf("######## GPS UPDATE ########\n");
                         substr31(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
                         sum33(P_kk_1,Kalman_R,Kalman_S); //S = H*P_kk_1*H'+ R;
                         invert33(Kalman_S,Kalman_S_inv); //S^-1

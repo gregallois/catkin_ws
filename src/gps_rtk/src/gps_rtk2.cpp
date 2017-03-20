@@ -8,6 +8,11 @@
 #include  <string>
 #include <math.h>
 
+
+float base_lat = 46.51849177;
+float base_lon = 6.56666458;
+
+
 void init_gps_msg(sensor_msgs::NavSatFix* gps_msg)
 {
 	gps_msg->header.stamp = ros::Time::now();
@@ -29,6 +34,10 @@ void update_gps_msg(sensor_msgs::NavSatFix* gps_msg, float pos_data[3])
 	gps_msg->latitude = pos_data[0];
 	gps_msg->longitude = pos_data[1];
 	gps_msg->altitude = pos_data[2];
+    
+    float newX_GPS = (pos_data[1] - base_lon)*767.4/10000*1e6;
+    float newY_GPS = (pos_data[0] - base_lat)*1111.6/10000*1e6;
+
 
 	ROS_INFO("GPS : Lat : = %.8f, Long = %.8f", pos_data[0], pos_data[1]);
 }

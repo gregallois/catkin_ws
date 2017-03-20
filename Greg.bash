@@ -65,20 +65,21 @@ tmux send-keys "rosrun navio2_imu imu_pub_with_mag 49" C-m
 
 tmux select-pane -t 0
 tmux split-window -v
-tmux send-keys "sleep 5" C-m
-tmux send-keys "sudo -i" C-m
-tmux send-keys "source /home/pi/catkin_ws/devel/setup.bash" C-m
-#tmux send-keys "rosrun navio2_remote remote_multiCtr 50 1600 0.7 0.2 0.2" C-m
-tmux send-keys "rosrun navio2_remote remote_multiCtr_Kalman_final 50 1600 0.7 0.2 0.2 46.51849177 6.56666458" C-m
-
-tmux select-pane -t 1
-tmux split-window -v
 tmux send-keys "source /home/pi/catkin_ws/devel/setup.bash" C-m
 tmux send-keys "sudo ifconfig usb0 192.168.2.2" C-m
 tmux send-keys "sleep 5" C-m
 tmux send-keys "sudo -i" C-m
 tmux send-keys "source /home/pi/catkin_ws/devel/setup.bash" C-m
 tmux send-keys "rosrun gps_rtk gps_rtk2" C-m
+
+tmux select-pane -t 1
+tmux split-window -v
+tmux send-keys "sleep 5" C-m
+tmux send-keys "sudo -i" C-m
+tmux send-keys "source /home/pi/catkin_ws/devel/setup.bash" C-m
+#tmux send-keys "rosrun navio2_remote remote_multiCtr 50 1600 0.7 0.2 0.2" C-m
+tmux send-keys "rosrun navio2_remote remote_multiCtr_Kalman_final 50 1600 0.7 0.2 0.2 46.51849177 6.56666458" C-m
+
 
 tmux split-window -h
 tmux send-keys "sleep 15" C-m                                       #no needs to start earlier because 10/15 sec of calibration
