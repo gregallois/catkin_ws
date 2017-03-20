@@ -328,7 +328,7 @@ int main(int argc, char **argv)
 		//acquire data
 		imuLoop();
 
-        if(printFreq>20){
+        if(printFreq>3){
             printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
             printFreq = 0;
         }else{
