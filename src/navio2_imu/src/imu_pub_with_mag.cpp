@@ -96,7 +96,7 @@ void imuSetup()
     printf("Move Motorcycle the motorcycle a bit !\n");
     sleep(10);
     
-    sample_count = 200;
+    sample_count = 2000;
     printf("Sampling begins, make a turn around z and a turn around y\n");
     for(ii = 0; ii < sample_count; ii++) {
 	
@@ -108,7 +108,7 @@ void imuSetup()
         if(my < mag_min[1]) mag_min[1] = my;
         if(mz > mag_max[2]) mag_max[2] = mz;
         if(mz < mag_min[2]) mag_min[2] = mz;
-        usleep(100000); //Let time for the magneto to change values
+        usleep(10000); //Let time for the magneto to change values
     }
     
     // Get hard iron correction
@@ -169,7 +169,6 @@ void imuLoop()
         my = (my - mag_bias[1])/mag_scale[1];
         mz = (mz - mag_bias[2])/mag_scale[2];
         
-    
        //Mahony algorithm for IMU - accelero - magneto and gyro taken into account
 	   ahrs.update(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, mx,-my, mz, dt);
 	    
@@ -189,6 +188,7 @@ void imuLoop()
 	
 	dtsum += dt;
     }
+
 }
 
 void init_imu_msg(sensor_msgs::Imu* imu_msg)
@@ -329,7 +329,7 @@ int main(int argc, char **argv)
 		imuLoop();
 
         if(printFreq>3){
-            printf("[roll : %f] \t [pitch : %f] \t [yaw : %f]\n", roll, pitch, yaw);
+            printf("[roll : %f] \t [pitch : %f] \t [yaw : %f] \t [mag : %f]\n", roll, pitch, yaw, atan2(my,mx));
             printFreq = 0;
         }else{
             printFreq++;
