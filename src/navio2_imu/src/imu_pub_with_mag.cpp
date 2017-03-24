@@ -112,10 +112,14 @@ void imuSetup()
     }
     
     // Get hard iron correction
-    mag_bias[0]  = (mag_max[0] + mag_min[0])/2;  // get average x mag bias in counts
-    mag_bias[1]  = (mag_max[1] + mag_min[1])/2;  // get average y mag bias in counts
-    mag_bias[2]  = (mag_max[2] + mag_min[2])/2;  // get average z mag bias in counts
+//    mag_bias[0]  = (mag_max[0] + mag_min[0])/2;  // get average x mag bias in counts
+//    mag_bias[1]  = (mag_max[1] + mag_min[1])/2;  // get average y mag bias in counts
+//    mag_bias[2]  = (mag_max[2] + mag_min[2])/2;  // get average z mag bias in counts
     
+    
+    mag_bias[0]  = 0.6688;  // get average x mag bias in counts
+    mag_bias[1]  = 0.1114;  // get average y mag bias in counts
+    mag_bias[2]  = 0.1492;  // get average z mag bias in counts
     
     // Get soft iron correction estimate
     mag_scale[0]  = (mag_max[0] - mag_min[0])/2;  // get average x axis max chord length in counts
