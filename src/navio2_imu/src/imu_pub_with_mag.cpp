@@ -330,6 +330,7 @@ int main(int argc, char **argv)
 
         if(printFreq>3){
             printf("[roll : %f] \t [pitch : %f] \t [yaw : %f] \t [mag : %f]\n", roll, pitch, yaw, atan2(my,mx));
+	    printf("mx : %f, my : %f\n", mx, my);	
             printFreq = 0;
         }else{
             printFreq++;
