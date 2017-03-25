@@ -86,6 +86,8 @@ tmux send-keys "sleep 15" C-m                                       #no needs to
 tmux send-keys "source /home/pi/catkin_ws/devel/setup.bash" C-m
 tmux send-keys "cd /home/pi/bagfiles" C-m
 tmux send-keys "rosbag record -a" C-m
+sleep 15
+tmux send-keys "killall -INT rosbag" C-m
 
 
 
