@@ -192,7 +192,7 @@ void imuLoop()
     
     if(yawDriftCounter<50)
     {
-        printf("Please leave motorcycle at rest toward the west.")
+        printf("Please leave motorcycle at rest toward the west.");
         yawDrift += yaw-oldYaw;
         yawDriftCounter++;
     }
