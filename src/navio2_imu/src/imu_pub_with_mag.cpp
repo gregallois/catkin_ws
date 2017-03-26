@@ -29,16 +29,17 @@ float mx, my, mz;
 
 // Orientation data
 
-float roll, pitch, yaw;
-float oldYaw;
-float currentYaw = 180.0;
+float roll, pitch;
+float yaw = 0;
+float oldYaw=0;
+float currentYaw = 90; // yaw is 90 compared to north when motorcycle is oriented to the west
 
 // Timing data
 
 //Gyro offset
 float offset[3];
 int yawDriftCounter = 0;
-float yawDrift;
+float yawDrift=0;
 
 //Magneto calibration
 float mag_bias[3]; //Biases terms on x-z-y
@@ -190,18 +191,25 @@ void imuLoop()
 	dtsum += dt;
     }
     
-    if(yawDriftCounter<50)
+    if(yawDriftCounter<600)
     {
-        printf("Please leave motorcycle at rest toward the west.");
+         printf("Please leave motorcycle at rest toward the west.\n");
+	 yawDriftCounter++;
+    }
+    if(yawDriftCounter>=600 && yawDriftCounter <1600)
+    {
+        printf("Please leave motorcycle at rest toward the west.\n");
         yawDrift += yaw-oldYaw;
         yawDriftCounter++;
     }
-    if(yawDriftCounter==50)
+    if(yawDriftCounter==1600)
     {
-        yawDrift /= 50;
+        yawDrift = yawDrift/1000;
+	yawDriftCounter++; 
     }
-    if(yawDriftCounter>50){
+    if(yawDriftCounter>1600){
         currentYaw += (yaw-oldYaw) - yawDrift;
+	printf("yawDrift : %f \n, currentYaw : %f\n", yawDrift, currentYaw);
     }
 
 }
@@ -254,7 +262,7 @@ void update_imu_msg(sensor_msgs::Imu* imu_msg, InertialSensor* imu)
 	imu_msg->orientation.x = roll;
 	imu_msg->orientation.y = pitch;
 	//imu_msg->orientation.z = yaw;
-    imu_msg->orientation.z = currentYaw;
+        imu_msg->orientation.z = currentYaw;
 	imu_msg->orientation.w = dt;
 
 	imu_msg->angular_velocity.x = gx;
@@ -346,7 +354,7 @@ int main(int argc, char **argv)
 
         if(printFreq>3){
             printf("[roll : %f] \t [pitch : %f] \t [yaw : %f] \t [mag : %f]\n", roll, pitch, yaw, atan2(my,mx));
-	    printf("mx : %f, my : %f\n", mx, my);	
+	    //printf("mx : %f, my : %f\n", mx, my);	
             printFreq = 0;
         }else{
             printFreq++;
