@@ -139,6 +139,13 @@ target_link_libraries(imu_pub_with_mag ${catkin_LIBRARIES})
 target_link_libraries(imu_pub_with_mag imu)
 target_link_libraries(imu_pub_with_mag imu2)
 
+
+add_executable(imu_pub_drift_compensation src/iimu_pub_drift_compensation.cpp)
+target_link_libraries(imu_pub_drift_compensation ${catkin_LIBRARIES})
+target_link_libraries(imu_pub_drift_compensation imu)
+target_link_libraries(imu_pub_drift_compensation imu2)
+
+
 ## Declare a C++ library
 # add_library(navio2_imu_pub
 #   src/${PROJECT_NAME}/navio2_imu_pub.cpp

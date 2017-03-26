@@ -18,7 +18,6 @@
 // Objects
 
 InertialSensor *imu;
-InertialSensor *imu2;
 AHRS    ahrs;   // Mahony AHRS
 
 // Sensor data
@@ -38,11 +37,8 @@ float currentYaw = 90; // yaw is 90 compared to north when motorcycle is oriente
 
 //Gyro offset
 float offset[3];
-
-
-//Magneto calibration
-float mag_bias[3]; //Biases terms on x-z-y
-float mag_scale[3]; //Normalization on each axis
+int yawDriftCounter = 0;
+float yawDrift=0;
 
 
 struct timeval tv;
@@ -61,7 +57,6 @@ void imuSetup()
     //----------------------- MPU initialization ------------------------------
 
     imu->initialize();
-    imu2->initialize();
 
     //-------------------------------------------------------------------------
 
@@ -89,43 +84,7 @@ void imuSetup()
 	ahrs.setGyroOffset(offset[0], offset[1], offset[2]);
     
     
-    printf("Beginning Magneto calibration...\n");
-    
-    
-    uint16_t ii = 0, sample_count = 0;
-    
-    float mag_max[3]={-FLT_MAX, -FLT_MAX, -FLT_MAX};
-    float mag_min[3]={FLT_MAX, FLT_MAX, FLT_MAX};
-    
-    printf("Move Motorcycle the motorcycle a bit !\n");
-    sleep(10);
-    
-    sample_count = 2000;
-    printf("Sampling begins, make a turn around z and a turn around y\n");
-    for(ii = 0; ii < sample_count; ii++) {
-	
-	imu2->update();
-        imu2->read_magnetometer(&mx, &my, &mz);
-        if(mx > mag_max[0]) mag_max[0] = mx;
-        if(mx < mag_min[0]) mag_min[0] = mx;
-        if(my > mag_max[1]) mag_max[1] = my;
-        if(my < mag_min[1]) mag_min[1] = my;
-        if(mz > mag_max[2]) mag_max[2] = mz;
-        if(mz < mag_min[2]) mag_min[2] = mz;
-        usleep(10000); //Let time for the magneto to change values
     }
-    
-    // Get hard iron correction
-
-     mag_bias[0]  = (mag_max[0] + mag_min[0])/2;  // get average x mag bias in counts
-     mag_bias[1]  = (mag_max[1] + mag_min[1])/2;  // get average y mag bias in counts
-     mag_bias[2]  = (mag_max[2] + mag_min[2])/2;  // get average z mag bias in counts
-    
-    
-    printf("Magnetometer Calibration done!\n");
-    printf("Offsets for magneto are: %f %f %f\n", mag_bias[0], mag_bias[1], mag_bias[2]);
-
-}
 
 //============================== Main loop ====================================
 
@@ -133,6 +92,7 @@ void imuLoop()
 {
 
     float dtsum = 0.0f; //sum of delta t's
+    oldYaw = yaw;
 
     while(dtsum < 1.0f/freq) //run this loop at 1300 Hz (Max frequency gives best results for Mahony filter)
     {
@@ -162,12 +122,6 @@ void imuLoop()
 	    gy *= 180 / PI;
 	    gz *= 180 / PI;
 
-        imu2->update();
-	    imu2->read_magnetometer(&mx, &my, &mz);
-        
-        mx = (mx - mag_bias[0])/mag_scale[0];
-        my = (my - mag_bias[1])/mag_scale[1];
-        mz = (mz - mag_bias[2])/mag_scale[2];
         
        //Mahony algorithm for IMU - accelero - magneto and gyro taken into account
 	   //ahrs.update(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, mx,-my, mz, dt);
@@ -189,6 +143,28 @@ void imuLoop()
 	dtsum += dt;
     }
     
+    
+    //Routine for yaw drift estimation and on-the-fly compensation
+    if(yawDriftCounter<600)
+    {
+         printf("Please leave motorcycle at rest toward the west.\n");
+	 yawDriftCounter++;
+    }
+    if(yawDriftCounter>=600 && yawDriftCounter <1600)
+    {
+        printf("Please leave motorcycle at rest toward the west.\n");
+        yawDrift += yaw-oldYaw;
+        yawDriftCounter++;
+    }
+    if(yawDriftCounter==1600)
+    {
+        yawDrift = yawDrift/1000;
+	yawDriftCounter++; 
+    }
+    if(yawDriftCounter>1600){
+        currentYaw += (yaw-oldYaw) - yawDrift;
+	printf("yawDrift : %f \n, currentYaw : %f\n", yawDrift, currentYaw);
+    }
 
 }
 
@@ -239,7 +215,8 @@ void update_imu_msg(sensor_msgs::Imu* imu_msg, InertialSensor* imu)
 	imu_msg->header.stamp = ros::Time::now();
 	imu_msg->orientation.x = roll;
 	imu_msg->orientation.y = pitch;
-	imu_msg->orientation.z = yaw;
+	//imu_msg->orientation.z = yaw;
+    imu_msg->orientation.z = currentYaw;
 	imu_msg->orientation.w = dt;
 
 	imu_msg->angular_velocity.x = gx;
@@ -312,14 +289,6 @@ int main(int argc, char **argv)
     }
     
     
-    printf("Selected: LSM9DS1\n");
-    imu2 = new LSM9DS1();
-    
-    if (!imu2->probe())
-    {
-        printf("LSM9DS1 not enabled\n");
-        return EXIT_FAILURE;
-    }
    
     //Initialize and calibrate both IMU
 	imuSetup();
@@ -330,8 +299,7 @@ int main(int argc, char **argv)
 		imuLoop();
 
         if(printFreq>3){
-            printf("[roll : %f] \t [pitch : %f] \t [yaw : %f] \t [mag : %f]\n", roll, pitch, yaw, atan2(my,mx));
-	    //printf("mx : %f, my : %f\n", mx, my);	
+            printf("[roll : %f] \t [pitch : %f] \t [yaw : %f] \n", roll, pitch, currentYaw);
             printFreq = 0;
         }else{
             printFreq++;
