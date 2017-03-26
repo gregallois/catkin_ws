@@ -30,11 +30,15 @@ float mx, my, mz;
 // Orientation data
 
 float roll, pitch, yaw;
+float oldYaw;
+float currentYaw = 180.0;
 
 // Timing data
 
 //Gyro offset
 float offset[3];
+int yawDriftCounter = 0;
+float yawDrift;
 
 //Magneto calibration
 float mag_bias[3]; //Biases terms on x-z-y
@@ -112,14 +116,14 @@ void imuSetup()
     }
     
     // Get hard iron correction
-//    mag_bias[0]  = (mag_max[0] + mag_min[0])/2;  // get average x mag bias in counts
-//    mag_bias[1]  = (mag_max[1] + mag_min[1])/2;  // get average y mag bias in counts
-//    mag_bias[2]  = (mag_max[2] + mag_min[2])/2;  // get average z mag bias in counts
+     mag_bias[0]  = (mag_max[0] + mag_min[0])/2;  // get average x mag bias in counts
+     mag_bias[1]  = (mag_max[1] + mag_min[1])/2;  // get average y mag bias in counts
+     mag_bias[2]  = (mag_max[2] + mag_min[2])/2;  // get average z mag bias in counts
     
     
-    mag_bias[0]  = 0.6688;  // get average x mag bias in counts
-    mag_bias[1]  = 0.1114;  // get average y mag bias in counts
-    mag_bias[2]  = 0.1492;  // get average z mag bias in counts
+    //mag_bias[0]  = 0.6688;  // get average x mag bias in counts
+    //mag_bias[1]  = 0.1114;  // get average y mag bias in counts
+    //mag_bias[2]  = 0.1492;  // get average z mag bias in counts
     
     // Get soft iron correction estimate
     mag_scale[0]  = (mag_max[0] - mag_min[0])/2;  // get average x axis max chord length in counts
@@ -137,6 +141,7 @@ void imuLoop()
 {
 
     float dtsum = 0.0f; //sum of delta t's
+    oldYaw = yaw;
 
     while(dtsum < 1.0f/freq) //run this loop at 1300 Hz (Max frequency gives best results for Mahony filter)
     {
@@ -174,8 +179,8 @@ void imuLoop()
         mz = (mz - mag_bias[2])/mag_scale[2];
         
        //Mahony algorithm for IMU - accelero - magneto and gyro taken into account
-	   ahrs.update(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, mx,-my, mz, dt);
-	    
+	   //ahrs.update(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, mx,-my, mz, dt);
+	    ahrs.update(ax, ay, az, gx*0.0175, gy*0.0175, gz*0.0175, dt);
 
 	    //------------------------ Read Euler angles ------------------------------
 
@@ -191,6 +196,20 @@ void imuLoop()
 	    isFirst = 0;
 	
 	dtsum += dt;
+    }
+    
+    if(yawDriftCounter<50)
+    {
+        printf("Please leave motorcycle at rest toward the west.")
+        yawDrift += yaw-oldYaw;
+        yawDriftCounter++;
+    }
+    if(yawDriftCounter==50)
+    {
+        yawDrift /= 50;
+    }
+    if(yawDriftCounter>50){
+        currentYaw += (yaw-oldYaw) - yawDrift;
     }
 
 }
@@ -242,7 +261,8 @@ void update_imu_msg(sensor_msgs::Imu* imu_msg, InertialSensor* imu)
 	imu_msg->header.stamp = ros::Time::now();
 	imu_msg->orientation.x = roll;
 	imu_msg->orientation.y = pitch;
-	imu_msg->orientation.z = yaw;
+	//imu_msg->orientation.z = yaw;
+    imu_msg->orientation.z = currentYaw;
 	imu_msg->orientation.w = dt;
 
 	imu_msg->angular_velocity.x = gx;
