@@ -116,30 +116,11 @@ void imuSetup()
     }
     
     // Get hard iron correction
-<<<<<<< HEAD
-          mag_bias[0]  = (mag_max[0] + mag_min[0])/2;  // get average x mag bias in counts
-	  mag_bias[1]  = (mag_max[1] + mag_min[1])/2;  // get average y mag bias in counts
-	  mag_bias[2]  = (mag_max[2] + mag_min[2])/2;  // get average z mag bias in counts
-    
-    
-   // mag_bias[0]  = 0.6688;  // get average x mag bias in counts
-   // mag_bias[1]  = 0.1114;  // get average y mag bias in counts
-   //x mag_bias[2]  = 0.1492;  // get average z mag bias in counts
-=======
+
      mag_bias[0]  = (mag_max[0] + mag_min[0])/2;  // get average x mag bias in counts
      mag_bias[1]  = (mag_max[1] + mag_min[1])/2;  // get average y mag bias in counts
      mag_bias[2]  = (mag_max[2] + mag_min[2])/2;  // get average z mag bias in counts
     
-    
-    //mag_bias[0]  = 0.6688;  // get average x mag bias in counts
-    //mag_bias[1]  = 0.1114;  // get average y mag bias in counts
-    //mag_bias[2]  = 0.1492;  // get average z mag bias in counts
->>>>>>> 57b5ffd05ae9ae5d87f4e31b646dcc3ffb91017e
-    
-    // Get soft iron correction estimate
-    mag_scale[0]  = (mag_max[0] - mag_min[0])/2;  // get average x axis max chord length in counts
-    mag_scale[1]  = (mag_max[1] - mag_min[1])/2;  // get average y axis max chord length in counts
-    mag_scale[2]  = (mag_max[2] - mag_min[2])/2;  // get average z axis max chord length in counts
     
     printf("Magnetometer Calibration done!\n");
     printf("Offsets for magneto are: %f %f %f\n", mag_bias[0], mag_bias[1], mag_bias[2]);
