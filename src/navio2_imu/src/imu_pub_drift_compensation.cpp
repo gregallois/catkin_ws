@@ -145,25 +145,25 @@ void imuLoop()
     
     
     //Routine for yaw drift estimation and on-the-fly compensation
-    if(yawDriftCounter<600)
+    if(yawDriftCounter<1000)
     {
-         printf("Please leave motorcycle at rest toward the west.\n");
+         printf("Please leave motorcycle at rest toward the west while drift is estimated.\n");
 	 yawDriftCounter++;
     }
-    if(yawDriftCounter>=600 && yawDriftCounter <1600)
+    if(yawDriftCounter>=1000 && yawDriftCounter <2000)
     {
         printf("Please leave motorcycle at rest toward the west.\n");
         yawDrift += yaw-oldYaw;
         yawDriftCounter++;
     }
-    if(yawDriftCounter==1600)
+    if(yawDriftCounter==2000)
     {
         yawDrift = yawDrift/1000;
 	yawDriftCounter++; 
     }
-    if(yawDriftCounter>1600){
+    if(yawDriftCounter>2000){
         currentYaw += (yaw-oldYaw) - yawDrift;
-	printf("yawDrift : %f \n, currentYaw : %f\n", yawDrift, currentYaw);
+	//printf("yawDrift : %f \t, currentYaw : %f\n", yawDrift, currentYaw);
     }
 
 }
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
 		//acquire data
 		imuLoop();
 
-        if(printFreq>3){
+        if(printFreq>3 && yawDriftCounter>2000){
             printf("[roll : %f] \t [pitch : %f] \t [yaw : %f] \n", roll, pitch, currentYaw);
             printFreq = 0;
         }else{

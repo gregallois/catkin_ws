@@ -201,6 +201,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "navio2_imu/CMakeFiles/imu2.dir/DependInfo.cmake"
   "navio2_imu/CMakeFiles/imu_magneto_calib.dir/DependInfo.cmake"
   "navio2_imu/CMakeFiles/imu_pub.dir/DependInfo.cmake"
+  "navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/DependInfo.cmake"
   "navio2_imu/CMakeFiles/imu_pub_with_mag.dir/DependInfo.cmake"
   "navio2_remote/CMakeFiles/pwm.dir/DependInfo.cmake"
   "navio2_remote/CMakeFiles/rcinput.dir/DependInfo.cmake"

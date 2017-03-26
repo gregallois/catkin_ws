@@ -547,6 +547,19 @@ imu_pub/fast:
 .PHONY : imu_pub/fast
 
 #=============================================================================
+# Target rules for targets named imu_pub_drift_compensation
+
+# Build rule for target.
+imu_pub_drift_compensation: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imu_pub_drift_compensation
+.PHONY : imu_pub_drift_compensation
+
+# fast build rule for target.
+imu_pub_drift_compensation/fast:
+	$(MAKE) -f navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/build.make navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/build
+.PHONY : imu_pub_drift_compensation/fast
+
+#=============================================================================
 # Target rules for targets named imu_pub_with_mag
 
 # Build rule for target.
@@ -680,6 +693,7 @@ help:
 	@echo "... imu2"
 	@echo "... imu_magneto_calib"
 	@echo "... imu_pub"
+	@echo "... imu_pub_drift_compensation"
 	@echo "... imu_pub_with_mag"
 	@echo "... pwm"
 	@echo "... rcinput"

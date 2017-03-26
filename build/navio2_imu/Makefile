@@ -200,6 +200,20 @@ imu_pub/fast:
 .PHONY : imu_pub/fast
 
 # Convenience name for target.
+navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/rule:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/rule
+.PHONY : navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/rule
+
+# Convenience name for target.
+imu_pub_drift_compensation: navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/rule
+.PHONY : imu_pub_drift_compensation
+
+# fast build rule for target.
+imu_pub_drift_compensation/fast:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/build.make navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/build
+.PHONY : imu_pub_drift_compensation/fast
+
+# Convenience name for target.
 navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule
 .PHONY : navio2_imu/CMakeFiles/imu_pub_with_mag.dir/rule
@@ -309,6 +323,30 @@ src/imu_pub.cpp.s:
 	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub.dir/build.make navio2_imu/CMakeFiles/imu_pub.dir/src/imu_pub.cpp.s
 .PHONY : src/imu_pub.cpp.s
 
+src/imu_pub_drift_compensation.o: src/imu_pub_drift_compensation.cpp.o
+.PHONY : src/imu_pub_drift_compensation.o
+
+# target to build an object file
+src/imu_pub_drift_compensation.cpp.o:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/build.make navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/src/imu_pub_drift_compensation.cpp.o
+.PHONY : src/imu_pub_drift_compensation.cpp.o
+
+src/imu_pub_drift_compensation.i: src/imu_pub_drift_compensation.cpp.i
+.PHONY : src/imu_pub_drift_compensation.i
+
+# target to preprocess a source file
+src/imu_pub_drift_compensation.cpp.i:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/build.make navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/src/imu_pub_drift_compensation.cpp.i
+.PHONY : src/imu_pub_drift_compensation.cpp.i
+
+src/imu_pub_drift_compensation.s: src/imu_pub_drift_compensation.cpp.s
+.PHONY : src/imu_pub_drift_compensation.s
+
+# target to generate assembly for a file
+src/imu_pub_drift_compensation.cpp.s:
+	cd /home/pi/catkin_ws/build && $(MAKE) -f navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/build.make navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir/src/imu_pub_drift_compensation.cpp.s
+.PHONY : src/imu_pub_drift_compensation.cpp.s
+
 src/imu_pub_with_mag.o: src/imu_pub_with_mag.cpp.o
 .PHONY : src/imu_pub_with_mag.o
 
@@ -344,6 +382,7 @@ help:
 	@echo "... imu2"
 	@echo "... imu_magneto_calib"
 	@echo "... imu_pub"
+	@echo "... imu_pub_drift_compensation"
 	@echo "... imu_pub_with_mag"
 	@echo "... install"
 	@echo "... install/local"
@@ -362,6 +401,9 @@ help:
 	@echo "... src/imu_pub.o"
 	@echo "... src/imu_pub.i"
 	@echo "... src/imu_pub.s"
+	@echo "... src/imu_pub_drift_compensation.o"
+	@echo "... src/imu_pub_drift_compensation.i"
+	@echo "... src/imu_pub_drift_compensation.s"
 	@echo "... src/imu_pub_with_mag.o"
 	@echo "... src/imu_pub_with_mag.i"
 	@echo "... src/imu_pub_with_mag.s"

@@ -14,6 +14,7 @@
 /home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu2.dir
 /home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu_magneto_calib.dir
 /home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu_pub.dir
+/home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu_pub_drift_compensation.dir
 /home/pi/catkin_ws/build/navio2_imu/CMakeFiles/imu_pub_with_mag.dir
 /home/pi/catkin_ws/build/navio2_remote/CMakeFiles/pwm.dir
 /home/pi/catkin_ws/build/navio2_remote/CMakeFiles/rcinput.dir

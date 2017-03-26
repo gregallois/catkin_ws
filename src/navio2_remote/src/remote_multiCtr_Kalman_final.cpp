@@ -231,7 +231,7 @@
 
 		//keep calibration after 15 seconds
 		if(the_time < 15) RollOffset = currentRoll;
-		if(the_time < 20) YawOffset = 180 - recYaw; //Initialize motorbike with an orientation of pi (west direction)
+		//if(the_time < 20) YawOffset = 180 - recYaw; //Initialize motorbike with an orientation of pi (west direction)
 
 		recYaw += YawOffset;
 		currentYaw = (recYaw+90)*3.141592/180.0 ; //Converting into radians and putting it in the good referential
