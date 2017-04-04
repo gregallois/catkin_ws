@@ -2,6 +2,7 @@
 	#include "PWM.h"
 	#include "Util.h"
 	#include <unistd.h>
+    #include <fstream>
 
 	#include "ros/ros.h"
 	#include "sensor_msgs/Temperature.h"
@@ -63,9 +64,10 @@
 	int first_gps = 0;
 
 	//Variables for Kalman
-	float Kalman_P[3][3] = {{0.5, 0.0, 0.0},{0, 0.5, 0.0}, {0.0, 0.0, 0.05}};
-	float Kalman_Q[2][2] = {{0.02, 0.0},{0.0, 0.007}};
-	float Kalman_R[3][3] = {{150, 0.0, 0.0},{0.0, 150, 0.0}, {0.0, 0.0, 300}};
+	float Kalman_P[3][3] = {{0.5, 0.0, 0.0},{0, 0.5, 0.0}, {0.0, 0.0, 0.05}}; //initial state covariance matrix
+    float Kalman_Qw[3][3] = {{0.5, 0.0, 0.0},{0, 0.5, 0.0}, {0.0, 0.0, 0.05}}; //process noise covariance matrix
+	float Kalman_Q[2][2] = {{0.0005, 0.0},{0.0, 0.0007}}; //yaw and speed measurements covariance matrix
+    float Kalman_R[3][3] = {{10.05, 0.0, -0.26},{0, 10.2, -1.2}, {-0.26, -1.2, 2.0}};//GPS measurements covariance matrix
 	float Kalman_S[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
 	float Kalman_S_inv[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
     float Kalman_K[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
@@ -375,16 +377,15 @@ float Kalman_evalYaw (float yaw, float currentYaw, float oldYaw){
 void Kalman_eval_State_cov(float newCovariance[3][3], float oldCovariance[3][3], float mu_kalman[3][1], float dt, float v)
 {
     float alpha = mu_kalman[2][0];
-    newCovariance[0][0] = oldCovariance[0][0] - sin(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][0]*v*sin(alpha) + dt*Kalman_Q[0][0]*cos(alpha)*cos(alpha)*dt;
-    newCovariance[0][1] = oldCovariance[0][1] + cos(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][1]*v*sin(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*cos(alpha)*dt;
-    newCovariance[0][2] = oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha);
-    newCovariance[1][0] = oldCovariance[1][0] + dt*oldCovariance[2][0]*v*cos(alpha) - sin(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*Kalman_Q[0][0]*cos(alpha)*dt*sin(alpha);
-    
-    newCovariance[1][1] = oldCovariance[1][1] + cos(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*oldCovariance[2][1]*v*cos(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*dt*sin(alpha);
-    newCovariance[1][2] = oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha);
-    newCovariance[2][0] = oldCovariance[2][0] - oldCovariance[2][2]*sin(alpha)*dt*v;
-    newCovariance[2][1] = oldCovariance[2][1] + oldCovariance[2][2]*cos(alpha)*dt*v;
-    newCovariance[2][2] = oldCovariance[2][2] + Kalman_Q[1][1];
+    newCovariance[0][0] = oldCovariance[0][0] - sin(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][0]*v*sin(alpha) + dt*Kalman_Q[0][0]*cos(alpha)*cos(alpha)*dt + Kalman_Qw[0][0];
+    newCovariance[0][1] = oldCovariance[0][1] + cos(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][1]*v*sin(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*cos(alpha)*dt + Kalman_Qw[0][1];
+    newCovariance[0][2] = oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha) + Kalman_Qw[0][2];
+    newCovariance[1][0] = oldCovariance[1][0] + dt*oldCovariance[2][0]*v*cos(alpha) - sin(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*Kalman_Q[0][0]*cos(alpha)*dt*sin(alpha)+ Kalman_Qw[1][0];
+    newCovariance[1][1] = oldCovariance[1][1] + cos(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*oldCovariance[2][1]*v*cos(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*dt*sin(alpha)+ Kalman_Qw[1][1];
+    newCovariance[1][2] = oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)+ Kalman_Qw[1][2];
+    newCovariance[2][0] = oldCovariance[2][0] - oldCovariance[2][2]*sin(alpha)*dt*v+ Kalman_Qw[2][0];
+    newCovariance[2][1] = oldCovariance[2][1] + oldCovariance[2][2]*cos(alpha)*dt*v+ Kalman_Qw[2][1];
+    newCovariance[2][2] = oldCovariance[2][2] + Kalman_Q[1][1]+ Kalman_Qw[2][2];
     
 }
 
@@ -648,8 +649,8 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 
 				double dT = currentTime.toSec()-previousTime.toSec();
 				
-                
-                //Prediction step
+                double time_pred = ros::Time::now().toSec();
+                //PREDICTION STEP
                 //State Covariance Matrix
                 Kalman_eval_State_cov(P_kk_1, Kalman_P, mu_kalman, dT, currentSpeed);
                 
@@ -659,8 +660,16 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 				mu_kk_1[0][0] = Kalman_evalX(mu_kalman[0][0], currentSpeed, mu_kk_1[2][0], (float)dT);
                 mu_kk_1[1][0] = Kalman_evalY(mu_kalman[1][0], currentSpeed, mu_kk_1[2][0], (float)dT);
                 oldYaw = currentYaw;
+                double dt_pred = ros::Time::now().toSec()-time_pred;
                 
-
+                ofstream myfile;
+                myfile.open("/home/pi/time_pred.txt", ios::app);
+                myfile << dt_pred << "\n";
+                myfile.close;
+                
+                
+                
+                //UPDATE STEP
 				if (GPS_data_rec > Update_phase && currentSpeed > 2.0) //We do not perform updates at zero speed (in such a case, IMU much more precise)
 				{
 
