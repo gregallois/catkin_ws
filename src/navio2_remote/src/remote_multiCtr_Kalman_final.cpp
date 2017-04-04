@@ -665,7 +665,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                 std::ofstream myfile;
                 myfile.open("/home/pi/time_pred.txt", std::ios::app);
                 myfile << dt_pred << "\n";
-                myfile.close;
+                myfile.close();
                 
                 
                 
