@@ -402,7 +402,8 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
     distance = diff[0][0]*(inv[0][0]*diff[0][0] + inv[1][0]*diff[1][0] + inv[2][0]*diff[2][0]) + diff[1][0]*(inv[0][1]*diff[0][0] + inv[1][1]*diff[1][0] + inv[2][1]*diff[2][0]) + diff[2][0]*(inv[0][2]*diff[0][0] +inv[1][2]*diff[1][0] + inv[2][2]*diff[2][0]);
     if(distance > CHI_SQUARE_THRESHOLD)
     {
-        return false;
+        return true;
+        //return false;
     }
     
     return true;
@@ -672,7 +673,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                 //UPDATE STEP
 				if (GPS_data_rec > Update_phase && currentSpeed > 2.0) //We do not perform updates at zero speed (in such a case, IMU much more precise)
 				{
-
+                    double time_up = ros::Time::now().toSec();
                     //if GPS measurement in an outlier, we do nothing, else we update
                     if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
                         printf("######## GPS UPDATE ########\n");
@@ -685,6 +686,14 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                         substr33(Kalman_eye,Kalman_K,Kalman_eye_min_K);//(eye(2)-K*H)
                         multip33by33(Kalman_eye_min_K,P_kk_1,Kalman_P);//P = (eye(2)-K*H)*P_kk_1;
                         Update_phase = GPS_data_rec;
+                        
+                        double dt_up = ros::Time::now().toSec()-time_pred;
+                        std::ofstream myfile;
+                        myfile.open("/home/pi/time_update.txt", std::ios::app);
+                        myfile << dt_up << "\n";
+                        myfile.close();
+
+
                         
                     }
                     else
