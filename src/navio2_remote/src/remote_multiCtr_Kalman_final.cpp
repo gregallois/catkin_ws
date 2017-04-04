@@ -662,8 +662,8 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                 oldYaw = currentYaw;
                 double dt_pred = ros::Time::now().toSec()-time_pred;
                 
-                ofstream myfile;
-                myfile.open("/home/pi/time_pred.txt", ios::app);
+                std::ofstream myfile;
+                myfile.open("/home/pi/time_pred.txt", std::ios::app);
                 myfile << dt_pred << "\n";
                 myfile.close;
                 
