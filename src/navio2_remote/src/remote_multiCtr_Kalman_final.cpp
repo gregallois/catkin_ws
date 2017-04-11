@@ -10,6 +10,10 @@
 	#include "sensor_msgs/NavSatFix.h"
 	#include <sstream>
 
+
+    //Minimum allowed float
+    #define EPSILON 0.00000001
+
 	//PWM Pins on Navio2
 	#define MOTOR_PWM_OUT 9
 	#define SERVO_PWM_OUT 0
@@ -397,6 +401,14 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
     
     substr31(point, mean, diff);
     
+    //ensuring that angle difference is betwenn -PI and PI
+    if(diff[2][0] > PI)
+    {
+        diff[2][0] = diff[2][0] - 2*PI;
+    }else if(ybar[2][0] < -PI){
+        diff[2][0] = diff[2][0] + 2*PI;
+    }
+    
     invert33(covariance, inv);
     
     distance = diff[0][0]*(inv[0][0]*diff[0][0] + inv[1][0]*diff[1][0] + inv[2][0]*diff[2][0]) + diff[1][0]*(inv[0][1]*diff[0][0] + inv[1][1]*diff[1][0] + inv[2][1]*diff[2][0]) + diff[2][0]*(inv[0][2]*diff[0][0] +inv[1][2]*diff[1][0] + inv[2][2]*diff[2][0]);
@@ -663,10 +675,10 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                 oldYaw = currentYaw;
                 double dt_pred = ros::Time::now().toSec()-time_pred;
                 
-                std::ofstream myfile;
-                myfile.open("/home/pi/time_pred.txt", std::ios::app);
-                myfile << dt_pred << "\n";
-                myfile.close();
+//                std::ofstream myfile;
+//                myfile.open("/home/pi/time_pred.txt", std::ios::app);
+//                myfile << dt_pred << "\n";
+//                myfile.close();
                 
                 
                 
@@ -674,10 +686,21 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 				if (GPS_data_rec > Update_phase && currentSpeed > 2.0) //We do not perform updates at zero speed (in such a case, IMU much more precise)
 				{
                     double time_up = ros::Time::now().toSec();
-                    //if GPS measurement in an outlier, we do nothing, else we update
-                    if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
+                    //if GPS measurement is an outlier, we do nothing, else we update
+                    //also test if GPS angle has changed (otherwise GPS measurement is the same as before and must not be taken into account)
+                    if(checkOutlier(P_kk_1, mu_kk_1, z_gps) && fabs(z_gps[2][0])>EPSILON){
                         printf("######## GPS UPDATE ########\n");
                         substr31(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
+                        
+                        //ensuring that angle difference is betwenn -PI and PI
+                        if(ybar[2][0] > PI)
+                        {
+                            ybar[2][0] = ybar[2][0] - 2*PI;
+                        }else if(ybar[2][0] < -PI)
+                        {
+                            ybar[2][0] = ybar[2][0] + 2*PI;
+                        }
+                        
                         sum33(P_kk_1,Kalman_R,Kalman_S); //S = H*P_kk_1*H'+ R;
                         invert33(Kalman_S,Kalman_S_inv); //S^-1
                         multip33by33(P_kk_1,Kalman_S_inv,Kalman_K); //K = P_kk_1*H'*S^(-1)
@@ -688,10 +711,10 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                         Update_phase = GPS_data_rec;
                         
                         double dt_up = ros::Time::now().toSec()-time_pred;
-                        std::ofstream myfile;
-                        myfile.open("/home/pi/time_update.txt", std::ios::app);
-                        myfile << dt_up << "\n";
-                        myfile.close();
+//                        std::ofstream myfile;
+//                        myfile.open("/home/pi/time_update.txt", std::ios::app);
+//                        myfile << dt_up << "\n";
+//                        myfile.close();
 
 
                         
