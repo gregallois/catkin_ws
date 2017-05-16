@@ -118,6 +118,22 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+include_directories(
+	include
+)
+
+add_library(rcinput src/RCInput.cpp)
+add_library(pwm src/PWM.cpp)
+add_library(util src/Util.cpp)
+#add_library(rgbled src/RGBled.cpp)
+
+add_executable(mpc_controller src/mpc_controller.cpp)
+target_link_libraries(mpc_controller ${catkin_LIBRARIES})
+target_link_libraries(mpc_controller rcinput)
+target_link_libraries(mpc_controller pwm)
+target_link_libraries(mpc_controller util)
+
+
 ## Declare a C++ library
 # add_library(Navio2_controller
 #   src/${PROJECT_NAME}/Navio2_controller.cpp
