@@ -76,7 +76,7 @@ void read_State(sensor_msgs::Imu state_msg)
             control_msg.variance = toSendControl[1][0];    // send speed reference
             
             //publish message
-            control_pub.publish(ctrl_msg);
+            control_pub.publish(control_msg);
 
             //looping
             ros::spinOnce();
