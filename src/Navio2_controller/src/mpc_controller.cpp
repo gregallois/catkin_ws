@@ -13,7 +13,7 @@ int freq = 5; //dt for controller is 0.2
 // state vector (x, y, yaw, virtual state, roll, speed)
 float currentState[6][1]    = {{0.0},{0.0},{0.0},{0.0},{0.0},{0.0}};
 // output control (roll reference, speed reference)
-float toSendControl[2][1]   = {{0.0}, {4.0}}
+float toSendControl[2][1]   = {{0.0}, {4.0}};
 
 
 void read_State(sensor_msgs::Imu state_msg)
