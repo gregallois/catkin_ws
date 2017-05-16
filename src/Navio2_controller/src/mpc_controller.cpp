@@ -3,6 +3,7 @@
     #include <fstream>
 	#include "ros/ros.h"
 	#include "sensor_msgs/Imu.h"
+#include "sensor_msgs/Temperature.h"
 	#include <sstream>
 
 float timeState    = 0;
@@ -19,7 +20,7 @@ float toSendControl[2][1]   = {{0.0}, {4.0}};
 void read_State(sensor_msgs::Imu state_msg)
 {
     //save the time of the aquisition
-    oldtimeState = timeState;
+    oldTimeState = timeState;
     timeState = state_msg.header.stamp.toSec();
     
     //save current state
