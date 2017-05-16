@@ -688,7 +688,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                     double time_up = ros::Time::now().toSec();
                     //if GPS measurement is an outlier, we do nothing, else we update
                     //also test if GPS angle has changed (otherwise GPS measurement is the same as before and must not be taken into account)
-                    if(checkOutlier(P_kk_1, mu_kk_1, z_gps) && fabs(z_gps[2][0])>EPSILON){
+                    if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
                         printf("######## GPS UPDATE ########\n");
                         substr31(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
                         

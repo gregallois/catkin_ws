@@ -11,7 +11,7 @@
 	#include <sstream>
 
 	//Constant speed objective
-        #define TARGET_PWM 1550
+        #define TARGET_PWM 1600
 
 	//PWM Pins on Navio2
 	#define MOTOR_PWM_OUT 9
