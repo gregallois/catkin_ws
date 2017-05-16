@@ -265,7 +265,7 @@ void read_MPC(sensor_msgs::Temperature mpc_msg)
 {
     
     mpcSpeed = mpc_msg.variance;
-    mpcRoll  = mpc_msg.speed;
+    mpcRoll  = mpc_msg.temperature;
     //ROS_INFO("dt: %f - Lat: %f - Lon: %f", dtGPS, GPSLat, GPSLon);
 }
 
@@ -432,7 +432,7 @@ int main(int argc, char **argv)
     //suscribe to gps topic
     ros::Subscriber gps_sub = n.subscribe("gps_readings", 1000, read_GPS);
     //suscribe to mpc control topic
-    ros::Subscriber mpc_sub = n.suscribe("mpc_control", 1000, read_MPC);
+    ros::Subscriber mpc_sub = n.subscribe("mpc_control", 1000, read_MPC);
     
     //running rate = freq Hz
     ros::Rate loop_rate(freq);
