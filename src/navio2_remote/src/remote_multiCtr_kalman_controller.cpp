@@ -218,7 +218,7 @@ int pid_Motor_Output(int desired_speed) // desired speed in m/s
     float controlSignal = Kp_m*err_m + Kierr_m + Kd_m*derr_m; // should be between 0 and 20.6m/s (3900*8.4*0.4*0.24*2*pi/60*62.5*10-3)
     
     int pwmSignal = (int)((controlSignal*500.0f)/20.6f)+1500;
-    if(pwmSignal > 2000) pwmSignal = 2000;
+    if(pwmSignal > 1600) pwmSignal = 1600;
     if(pwmSignal < 1500) pwmSignal = 1500;
     
     return pwmSignal;
@@ -355,6 +355,7 @@ int main(int argc, char **argv)
     Kp_m = 0;
     Ki_m = 0;
     Kd_m = 0;
+    int emergencyStop = 0;
     
     ROS_INFO("number of argc %d", argc);
     
@@ -528,8 +529,7 @@ int main(int argc, char **argv)
         
         //Get Desired PWM Speed using Throttle saturation
         int desired_pwm = 0;
-        if(rcin.read(3) > 1500) desired_pwm = ((float)rcin.read(3)-1500.0f)*((float)saturation - 1500.0f)/500.0f + 1500.0f;
-        else desired_pwm = rcin.read(3);
+        if(rcin.read(3) > 1550) emergencyStop = 1;
         
         //if(rcin.read(3) >= saturation)
         //	desired_pwm = saturation;
@@ -556,7 +556,13 @@ int main(int argc, char **argv)
         
         //calculate output to motor from pid controller
         //motor_input = desired_pwm;
-        motor_input = pid_Motor_Output(mpcSpeed);
+        if(emergencyStop==0){
+            motor_input = pid_Motor_Output(mpcSpeed);
+        }else
+        {
+            motor_input = 1500;
+        }
+            
         //if(desired_pwm < 1500)
         //    motor_input = desired_pwm;
         
@@ -566,7 +572,7 @@ int main(int argc, char **argv)
         //write readings on pwm output
         motor.set_duty_cycle(MOTOR_PWM_OUT, ((float)motor_input)/1000.0f);
         servo.set_duty_cycle(SERVO_PWM_OUT, ((float)servo_input)/1000.0f);
-        printf("desired speed : %f, motorPWM: %d, roll : %f\n", mpcSpeed, motor_input, mpcRoll);
+        printf("desired speed : %f, motorPWM: %d, emergency: %d, roll : %f\n", mpcSpeed, motor_input, emergencyStop, mpcRoll);
         //Measure time for initial roll calibration
         the_time = ros::Time::now().sec%1000-initTime;
         
