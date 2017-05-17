@@ -60,7 +60,7 @@ void read_State(sensor_msgs::Imu state_msg)
         
         while (ros::ok()){
         
-            toSendControl[1][0] = toSendControl[1][0]+1;
+            toSendControl[1][0] = 5;
             //read last state as estimated by the Kalman filter ?? done automatically ??
             
             //run MPC algorithm
