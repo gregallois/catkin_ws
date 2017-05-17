@@ -356,6 +356,7 @@ int main(int argc, char **argv)
     Ki_m = 0;
     Kd_m = 0;
     int emergencyStop = 0;
+    int read_PWM = 1500;
     
     ROS_INFO("number of argc %d", argc);
     
@@ -529,7 +530,8 @@ int main(int argc, char **argv)
         
         //Get Desired PWM Speed using Throttle saturation
         int desired_pwm = 0;
-        if(rcin.read(3) > 1550) emergencyStop = 1;
+        read_PWM = rcin.read(3) ;
+        if(read_PWM > 1550) emergencyStop = 1;
         
         //if(rcin.read(3) >= saturation)
         //	desired_pwm = saturation;
@@ -572,7 +574,7 @@ int main(int argc, char **argv)
         //write readings on pwm output
         motor.set_duty_cycle(MOTOR_PWM_OUT, ((float)motor_input)/1000.0f);
         servo.set_duty_cycle(SERVO_PWM_OUT, ((float)servo_input)/1000.0f);
-        printf("desired speed : %f, motorPWM: %d, speed: %f, roll : %f, emergency: %d\n", mpcSpeed, motor_input, speed, mpcRoll, emergencyStop);
+        printf("desired speed : %f, motorPWM: %d, speed: %f, roll : %f, emergency: %d, rcin: %d\n", mpcSpeed, motor_input, speed, mpcRoll, emergencyStop, read_PWM);
         //Measure time for initial roll calibration
         the_time = ros::Time::now().sec%1000-initTime;
         
