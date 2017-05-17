@@ -636,7 +636,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 			//write readings on pwm output
 			motor.set_duty_cycle(MOTOR_PWM_OUT, ((float)motor_input)/1000.0f); 
 			servo.set_duty_cycle(SERVO_PWM_OUT, ((float)servo_input)/1000.0f);
-            printf("%i, %f\n", motor_input, desired_speed);
+            printf("%i, %f, %f\n", motor_input, desired_speed, currentSpeed);
 			//Measure time for initial roll calibration
 			the_time = ros::Time::now().sec%1000-initTime;
 
