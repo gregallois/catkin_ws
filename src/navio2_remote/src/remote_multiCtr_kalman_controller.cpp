@@ -356,7 +356,7 @@ int main(int argc, char **argv)
     Ki_m = 0;
     Kd_m = 0;
     int emergencyStop = 0;
-    int emergencyCout = 0;
+    int emergencyCount = 0;
     int read_PWM = 1500;
     
     ROS_INFO("number of argc %d", argc);
