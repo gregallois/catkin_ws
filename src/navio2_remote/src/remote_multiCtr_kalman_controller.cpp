@@ -356,6 +356,7 @@ int main(int argc, char **argv)
     Ki_m = 0;
     Kd_m = 0;
     int emergencyStop = 0;
+    int emergencyCout = 0;
     int read_PWM = 1500;
     
     ROS_INFO("number of argc %d", argc);
@@ -531,7 +532,13 @@ int main(int argc, char **argv)
         //Get Desired PWM Speed using Throttle saturation
         int desired_pwm = 0;
         read_PWM = rcin.read(3) ;
-        if(read_PWM > 1550) emergencyStop = 1;
+        if(read_PWM > 1550)
+        {
+            emergencyCount++;
+            if(emergencyCount>10) emergencyStop=1;
+        }else{
+            emergencyCount = 0;
+        }
         
         //if(rcin.read(3) >= saturation)
         //	desired_pwm = saturation;
