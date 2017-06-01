@@ -601,13 +601,13 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 			int desired_pwm = 0;
 			if(rcin.read(3) > 1500) desired_pwm = ((float)rcin.read(3)-1500.0f)*((float)saturation - 1500.0f)/500.0f + 1500.0f;		
 			else desired_pwm = rcin.read(3);
-
+            printf("desired_PWM: %d\n", desired_PWM);
 	//if(rcin.read(3) >= saturation)
 			//	desired_pwm = saturation;
 			//else
 			//	desired_pwm = rcin.read(3);
 
-			//get derired speed in m/s using desired pwm
+			//get desired speed in m/s using desired pwm
 			desired_speed = 20.6f*((float)desired_pwm-1500)/(500.0f);
 			if(desired_speed < 0) desired_speed = 0.0f;
 
