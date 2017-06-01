@@ -601,7 +601,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 			int desired_pwm = 0;
 			if(rcin.read(3) > 1500) desired_pwm = ((float)rcin.read(3)-1500.0f)*((float)saturation - 1500.0f)/500.0f + 1500.0f;		
 			else desired_pwm = rcin.read(3);
-            printf("desired_PWM: %d\n", desired_PWM);
+            printf("desired_PWM: %d\n", desired_pwm);
 	//if(rcin.read(3) >= saturation)
 			//	desired_pwm = saturation;
 			//else
