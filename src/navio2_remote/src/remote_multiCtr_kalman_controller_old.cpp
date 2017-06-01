@@ -1,27 +1,21 @@
 //
 //  remote_multiCtr_kalman_controller.cpp
-//
+//  
 //
 //  Created by Grégoire Gallois-Montbrun on 16/05/2017.
 //
 //
 
-
 #include "RCInput.h"
 #include "PWM.h"
 #include "Util.h"
 #include <unistd.h>
-#include <fstream>
 
 #include "ros/ros.h"
 #include "sensor_msgs/Temperature.h"
 #include "sensor_msgs/Imu.h"
 #include "sensor_msgs/NavSatFix.h"
 #include <sstream>
-
-
-//Minimum allowed float
-#define EPSILON 0.00000001
 
 //PWM Pins on Navio2
 #define MOTOR_PWM_OUT 9
@@ -38,9 +32,6 @@
 #define Ki1 0.0f
 #define Kd1 0.03f
 
-//Mahalanobis outlier rejection
-#define CHI_SQUARE_THRESHOLD 6.55
-
 // PID for roll angle outer loop
 float Kp2[3] = {0, 1.05f, 1.22f};
 float Ki2[3] = {2.23f, 5.89f, 5.83f};
@@ -56,7 +47,6 @@ ros::Time currentTime;
 ros::Time previousTime;
 
 float currentYaw;
-float oldYaw = 0.0; //previous yaw received from IMU
 float recYaw; //Yaw information recieved
 
 float currentSpeed;
@@ -74,33 +64,31 @@ float GPS_lon;
 double currentTimeGPS;
 double previousTimeGPS;
 double dtGPS;
-float base_lat = 46.51849177;
-float base_lon = 6.56666458;
+float base_lat; //= 46.51849177;
+float base_lon; // = 6.56666458;
 int GPS_data_rec = 0;
 int Update_phase = 0;
 int first_gps = 0;
 
 //Variables for Kalman
-float Kalman_P[3][3] = {{1.5, 0.0, 0.0},{0, 1.5, 0.0}, {0.0, 0.0, 1}}; //initial state covariance matrix
-float Kalman_Qw[3][3] = {{0.0001, 0.0, 0.0},{0, 0.0001, 0.0}, {0.0, 0.0, 0.0001}}; //process noise covariance matrix
-float Kalman_Q[2][2] = {{0.002, 0.0},{0.0, 0.00001}}; //yaw and speed measurements covariance matrix
-float Kalman_R[3][3] = {{3.1, 0.0, -0.26},{0, 4.2, -1.2}, {-0.26, -1.2, 2.0}};//GPS measurements covariance matrix
-float Kalman_S[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
-float Kalman_S_inv[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
-float Kalman_K[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
-float Kalman_eye[3][3] = {{1.0, 0.0, 0.0},{0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}};
-float Kalman_eye_min_K[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
-float Kalman_K_ybar[3][1] = {{0.0},{0.0}, {0.0}};
+float Kalman_P[2][2] = {{0.0, 0.0},{0.0, 0.0}};
+float Kalman_Q[2][2] = {{0.5*1/1e5, 0.0},{0.0, 0.5*1/1e5}};
+float Kalman_R[2][2] = {{0.1, 0.0},{0.0, 0.1}};
+float Kalman_S[2][2] = {{0.0, 0.0},{0.0, 0.0}};
+float Kalman_S_inv[2][2] = {{0.0, 0.0},{0.0, 0.0}};
+float Kalman_K[2][2] = {{0.0, 0.0},{0.0, 0.0}};
+float Kalman_eye[2][2] = {{1.0, 0.0},{0.0, 1.0}};
+float Kalman_eye_min_K[2][2] = {{0.0, 0.0},{0.0, 0.0}};
+float Kalman_K_ybar[2][1] = {{0.0},{0.0}};
 
 // note that Kalman_H is identity matrix
 // note that the jacobian of the system is the identity matrix
 
-float mu_kalman[3][1] = {{0.0},{0.0}, {0.0}};
-float P_kk_1[3][3];
-float mu_kk_1[3][1];
-float ybar[3][1];
-float z_gps[3][1] = {{0.0},{0.0},{0.0}};
-float yaw_GPS = 0.0;
+float mu_kalman[2][1] = {{0.0},{0.0}};
+float P_kk_1[2][2];
+float mu_kk_1[2][1];
+float ybar[2][1];
+float z_gps[2][1] = {{0.0},{0.0}};
 
 //Roll Errors 1
 float err1;
@@ -230,7 +218,7 @@ int pid_Motor_Output(int desired_speed) // desired speed in m/s
     float controlSignal = Kp_m*err_m + Kierr_m + Kd_m*derr_m; // should be between 0 and 20.6m/s (3900*8.4*0.4*0.24*2*pi/60*62.5*10-3)
     
     int pwmSignal = (int)((controlSignal*500.0f)/20.6f)+1500;
-    if(pwmSignal > 2000) pwmSignal = 2000;
+    if(pwmSignal > 1600) pwmSignal = 1600;
     if(pwmSignal < 1500) pwmSignal = 1500;
     
     return pwmSignal;
@@ -250,10 +238,10 @@ void read_Imu(sensor_msgs::Imu imu_msg)
     
     //keep calibration after 15 seconds
     if(the_time < 15) RollOffset = currentRoll;
-    //if(the_time < 20) YawOffset = 180 - recYaw; //Initialize motorbike with an orientation of pi (west direction)
+    if(the_time < 20) YawOffset = 180 - recYaw; //Initialize motorbike with an orientation of pi (west direction)
     
     recYaw += YawOffset;
-    currentYaw = (recYaw+90)*3.141592/180.0 ; //Converting into radians and putting it in the good referential
+    currentYaw = recYaw*3.141592/180.0; //Converting into radians
     currentRoll -= RollOffset;
     //ROS_INFO("New Roll %f", currentRoll);
 }
@@ -281,108 +269,6 @@ void read_MPC(sensor_msgs::Temperature mpc_msg)
     //ROS_INFO("dt: %f - Lat: %f - Lon: %f", dtGPS, GPSLat, GPSLon);
 }
 
-
-void sum33(float a[3][3], float b[3][3], float c[3][3])
-{
-    c[0][0] = a[0][0] + b[0][0];
-    c[0][1] = a[0][1] + b[0][1];
-    c[0][2] = a[0][2] + b[0][2];
-    c[1][0] = a[1][0] + b[1][0];
-    c[1][1] = a[1][1] + b[1][1];
-    c[1][2] = a[1][2] + b[1][2];
-    c[2][0] = a[2][0] + b[2][0];
-    c[2][1] = a[2][1] + b[2][1];
-    c[2][2] = a[2][2] + b[2][2];
-}
-
-void substr33(float a[3][3], float b[3][3], float c[3][3])
-{
-    c[0][0] = a[0][0] - b[0][0];
-    c[0][1] = a[0][1] - b[0][1];
-    c[0][2] = a[0][2] - b[0][2];
-    c[1][0] = a[1][0] - b[1][0];
-    c[1][1] = a[1][1] - b[1][1];
-    c[1][2] = a[1][2] - b[1][2];
-    c[2][0] = a[2][0] - b[2][0];
-    c[2][1] = a[2][1] - b[2][1];
-    c[2][2] = a[2][2] - b[2][2];
-}
-
-void sum31(float a[3][1], float b[3][1], float c[3][1])
-{
-    c[0][0] = a[0][0] + b[0][0];
-    c[1][0] = a[1][0] + b[1][0];
-    c[2][0] = a[2][0] + b[2][0];
-}
-
-void substr31(float a[3][1], float b[3][1], float c[3][1])
-{
-    c[0][0] = a[0][0] - b[0][0];
-    c[1][0] = a[1][0] - b[1][0];
-    c[2][0] = a[2][0] - b[2][0];
-}
-
-
-void invert33(float a[3][3], float b[3][3])
-{
-    float det = a[0][0]*a[1][1]*a[2][2] - a[0][0]*a[1][2]*a[2][1] - a[0][1]*a[1][0]*a[2][2] + a[0][1]*a[1][2]*a[2][0] + a[0][2]*    a[1][0]*a[2][1] - a[0][2]*a[1][1]*a[2][0];
-    b[0][0] = 1.0/det* (a[1][1]*a[2][2] - a[1][2]*a[2][1]);
-    b[0][1] = 1.0/det* (a[0][2]*a[2][1] - a[0][1]*a[2][2]);
-    b[0][2] = 1.0/det* (a[0][1]*a[1][2] - a[0][2]*a[1][1]);
-    b[1][0] = 1.0/det* (a[1][2]*a[2][0] - a[1][0]*a[2][2]);
-    b[1][1] = 1.0/det* (a[0][0]*a[2][2] - a[0][2]*a[2][0]);
-    b[1][2] = 1.0/det* (a[0][2]*a[1][0] - a[0][0]*a[1][2]);
-    b[2][0] = 1.0/det* (a[1][0]*a[2][1] - a[1][1]*a[2][0]);
-    b[2][1] = 1.0/det* (a[0][1]*a[2][0] - a[0][0]*a[2][1]);
-    b[2][2] = 1.0/det* (a[0][0]*a[1][1] - a[0][1]*a[1][0]);
-}
-
-void multip33by33 (float a[3][3], float b[3][3], float c[3][3])
-{
-    
-    c[0][0] = a[0][0]*b[0][0] + a[0][1]*b[1][0] + a[0][2]*b[2][0];
-    c[0][1] = a[0][0]*b[0][1] + a[0][1]*b[1][1] + a[0][2]*b[2][1];
-    c[0][2] = a[0][0]*b[0][2] + a[0][1]*b[1][2] + a[0][2]*b[2][2];
-    c[1][0] = a[1][0]*b[0][0] + a[1][1]*b[1][0] + a[1][2]*b[2][0];
-    c[1][1] = a[1][0]*b[0][1] + a[1][1]*b[1][1] + a[1][2]*b[2][1];
-    c[1][2] = a[1][0]*b[0][2] + a[1][1]*b[1][2] + a[1][2]*b[2][2];
-    c[2][0] = a[2][0]*b[0][0] + a[2][1]*b[1][0] + a[2][2]*b[2][0];
-    c[2][1] = a[2][0]*b[0][1] + a[2][1]*b[1][1] + a[2][2]*b[2][1];
-    c[2][2] = a[2][0]*b[0][2] + a[2][1]*b[1][2] + a[2][2]*b[2][2];
-}
-
-void multip33by31 (float a[3][3], float b[3][1], float c[3][1])
-{
-    c[0][0] = a[0][0]*b[0][0] + a[0][1]*b[1][0] + a[0][2]*b[2][0];
-    c[1][0] = a[1][0]*b[0][0] + a[1][1]*b[1][0] + a[1][2]*b[2][0];
-    c[2][0] = a[2][0]*b[0][0] + a[2][1]*b[1][0] + a[2][2]*b[2][0];
-}
-
-void equal31(float a[3][1], float b[3][1])
-{
-    
-    b[0][0] = a[0][0];
-    b[1][0] = a[1][0];
-    b[2][0] = a[2][0];
-}
-
-void equal33(float a[3][3], float b[3][3])
-{
-    
-    b[0][0] = a[0][0];
-    b[0][1] = a[0][1];
-    b[0][2] = a[0][2];
-    b[1][0] = a[1][0];
-    b[1][1] = a[1][1];
-    b[1][2] = a[1][2];
-    b[2][0] = a[2][0];
-    b[2][1] = a[2][1];
-    b[2][2] = a[2][2];
-}
-
-
-
-
 float Kalman_evalX (float x, float v, float alpha, float dt){
     float x2 = x + v*cos(alpha)*dt;
     return x2;
@@ -393,53 +279,72 @@ float Kalman_evalY (float y, float v, float alpha, float dt){
     return y2;
 }
 
-float Kalman_evalYaw (float yaw, float currentYaw, float oldYaw){
-    float newYaw = yaw + (currentYaw - oldYaw);
-    return newYaw;
+void sum22 (float a[2][2], float b[2][2], float c[2][2])
+{
+    c[0][0] = a[0][0] + b[0][0];
+    c[0][1] = a[0][1] + b[0][1];
+    c[1][0] = a[1][0] + b[1][0];
+    c[1][1] = a[1][1] + b[1][1];
 }
 
-
-void Kalman_eval_State_cov(float newCovariance[3][3], float oldCovariance[3][3], float mu_kalman[3][1], float dt, float v)
+void substr22 (float a[2][2], float b[2][2], float c[2][2])
 {
-    float alpha = mu_kalman[2][0];
-    newCovariance[0][0] = oldCovariance[0][0] - sin(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][0]*v*sin(alpha) + dt*Kalman_Q[0][0]*cos(alpha)*cos(alpha)*dt + Kalman_Qw[0][0];
-    newCovariance[0][1] = oldCovariance[0][1] + cos(alpha)*dt*v*(oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha)) - dt*oldCovariance[2][1]*v*sin(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*cos(alpha)*dt + Kalman_Qw[0][1];
-    newCovariance[0][2] = oldCovariance[0][2] - dt*oldCovariance[2][2]*v*sin(alpha) + Kalman_Qw[0][2];
-    newCovariance[1][0] = oldCovariance[1][0] + dt*oldCovariance[2][0]*v*cos(alpha) - sin(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*Kalman_Q[0][0]*cos(alpha)*dt*sin(alpha)+ Kalman_Qw[1][0];
-    newCovariance[1][1] = oldCovariance[1][1] + cos(alpha)*dt*v*(oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)) + dt*oldCovariance[2][1]*v*cos(alpha) + dt*Kalman_Q[0][0]*sin(alpha)*dt*sin(alpha)+ Kalman_Qw[1][1];
-    newCovariance[1][2] = oldCovariance[1][2] + dt*oldCovariance[2][2]*v*cos(alpha)+ Kalman_Qw[1][2];
-    newCovariance[2][0] = oldCovariance[2][0] - oldCovariance[2][2]*sin(alpha)*dt*v+ Kalman_Qw[2][0];
-    newCovariance[2][1] = oldCovariance[2][1] + oldCovariance[2][2]*cos(alpha)*dt*v+ Kalman_Qw[2][1];
-    newCovariance[2][2] = oldCovariance[2][2] + Kalman_Q[1][1]+ Kalman_Qw[2][2];
-    
+    c[0][0] = a[0][0] - b[0][0];
+    c[0][1] = a[0][1] - b[0][1];
+    c[1][0] = a[1][0] - b[1][0];
+    c[1][1] = a[1][1] - b[1][1];
 }
 
-bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
+void sum21 (float a[2][1], float b[2][1], float c[2][1])
 {
-    float diff[3][1] = {{0.0},{0.0}, {0.0}};
-    float inv[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
-    float distance;
+    c[0][0] = a[0][0] + b[0][0];
+    c[1][0] = a[1][0] + b[1][0];
+}
+
+void substr21 (float a[2][1], float b[2][1], float c[2][1])
+{
+    c[0][0] = a[0][0] - b[0][0];
+    c[1][0] = a[1][0] - b[1][0];
+}
+
+void invert22 (float a[2][2], float b[2][2])
+{
+    float det = a[0][0]*a[1][1] - a[0][1]*a[1][0];
+    b[0][0] = 1.0/det*a[1][1];
+    b[0][1] = -1.0/det*a[0][1];
+    b[1][0] = -1.0/det*a[1][0];
+    b[1][1] = 1.0/det*a[0][0];
+}
+
+void multip22by22 (float a[2][2], float b[2][2], float c[2][2])
+{
+    c[0][0] = a[0][0] * b[0][0] + a[0][1] * b[1][0];
+    c[0][1] = a[0][0] * b[0][1] + a[0][1] * b[1][1];
+    c[1][0] = a[1][0] * b[0][0] + a[1][1] * b[1][0];
+    c[1][1] = a[1][0] * b[0][1] + a[1][1] * b[1][1];
+}
+
+void multip22by21 (float a[2][2], float b[2][1], float c[2][1])
+{
     
-    substr31(point, mean, diff);
+    c[0][0] = a[0][0] * b[0][0] + a[0][1] * b[1][0];
+    c[1][0] = a[1][0] * b[0][0] + a[1][1] * b[1][0];
+}
+
+void equal21 (float a[2][1], float b[2][1])
+{
     
-    //ensuring that angle difference is betwenn -PI and PI
-    if(diff[2][0] > PI)
-    {
-        diff[2][0] = diff[2][0] - 2*PI;
-    }else if(ybar[2][0] < -PI){
-        diff[2][0] = diff[2][0] + 2*PI;
-    }
+    b[0][0] = a[0][0];
+    b[1][0] = a[1][0];
+}
+
+void equal22 (float a[2][2], float b[2][2])
+{
     
-    invert33(covariance, inv);
-    
-    distance = diff[0][0]*(inv[0][0]*diff[0][0] + inv[1][0]*diff[1][0] + inv[2][0]*diff[2][0]) + diff[1][0]*(inv[0][1]*diff[0][0] + inv[1][1]*diff[1][0] + inv[2][1]*diff[2][0]) + diff[2][0]*(inv[0][2]*diff[0][0] +inv[1][2]*diff[1][0] + inv[2][2]*diff[2][0]);
-    if(distance > CHI_SQUARE_THRESHOLD)
-    {
-        return true;
-        //return false;
-    }
-    
-    return true;
+    b[0][0] = a[0][0];
+    b[1][0] = a[1][0];
+    b[0][1] = a[0][1];
+    b[1][1] = a[1][1];
 }
 
 int main(int argc, char **argv)
@@ -450,13 +355,9 @@ int main(int argc, char **argv)
     Kp_m = 0;
     Ki_m = 0;
     Kd_m = 0;
-    
-    
     int emergencyStop = 0;
     int emergencyCount = 0;
     int read_PWM = 1500;
-    
-    float newX_GPS, newY_GPS;
     
     ROS_INFO("number of argc %d", argc);
     
@@ -607,8 +508,6 @@ int main(int argc, char **argv)
     RollOffset = 0;
     int initTime = ros::Time::now().sec%1000;
     
-    int printFreq = 0;
-    
     
     /*******************************************/
     /*             MAIN ROS LOOP               */
@@ -616,31 +515,38 @@ int main(int argc, char **argv)
     
     while (ros::ok())
     {
+        
         printf("%f, %f\n", mpcRoll, mpcSpeed);
         
         /*******************************************/
         /*             ROLL SECTION                */
         /*******************************************/
         
-        //read desired roll from mpc controller (WARNING: it has to be in degrees)
-        desired_roll = mpcRoll;
-
+        //read desired roll angle with remote ( 1250 to 1750 ) to range limited by defines
+        desired_roll = -((float)rcin.read(2)-1500.0f)*max_roll_angle/250.0f;
+        //printf("recieved pwm %f\n", (float)rcin.read(2));
         /*******************************************/
         /*             VELOCITY SECTION            */
         /*******************************************/
         
-        //Emergency strop if remote held during a few seconds
+        //Get Desired PWM Speed using Throttle saturation
+        int desired_pwm = 0;
         read_PWM = rcin.read(3) ;
         if(read_PWM > 1550)
         {
             emergencyCount++;
-            if(emergencyCount>10) emergencyStop = 1;
+            if(emergencyCount>10) emergencyStop=1;
         }else{
             emergencyCount = 0;
         }
         
-        //get desired speed from mpc controller
-        desired_speed = mpcSpeed;
+        //if(rcin.read(3) >= saturation)
+        //	desired_pwm = saturation;
+        //else
+        //	desired_pwm = rcin.read(3);
+        
+        //get derired speed in m/s using desired pwm
+        desired_speed = 20.6f*((float)desired_pwm-1500)/(500.0f);
         if(desired_speed < 0) desired_speed = 0.0f;
         
         //Read current Speed in m/s
@@ -658,13 +564,16 @@ int main(int argc, char **argv)
         currentTimeSpeed = ros::Time::now();
         
         //calculate output to motor from pid controller
+        //motor_input = desired_pwm;
         if(emergencyStop==0){
             motor_input = pid_Motor_Output(mpcSpeed);
         }else
         {
             motor_input = 1500;
         }
-        
+            
+        //if(desired_pwm < 1500)
+        //    motor_input = desired_pwm;
         
         //calculate output to servo from pid controller
         servo_input = pid_Servo_Output(pid_Ref_Output(desired_roll));
@@ -672,7 +581,7 @@ int main(int argc, char **argv)
         //write readings on pwm output
         motor.set_duty_cycle(MOTOR_PWM_OUT, ((float)motor_input)/1000.0f);
         servo.set_duty_cycle(SERVO_PWM_OUT, ((float)servo_input)/1000.0f);
-        printf("%i, %f, %f\n", motor_input, desired_speed, currentSpeed);
+        printf("desired speed : %f, motorPWM: %d, speed: %f, roll : %f, emergency: %d, rcin: %d\n", mpcSpeed, motor_input, speed, mpcRoll, emergencyStop, read_PWM);
         //Measure time for initial roll calibration
         the_time = ros::Time::now().sec%1000-initTime;
         
@@ -682,102 +591,50 @@ int main(int argc, char **argv)
         /*        KALMAN FILTERING SECTION         */
         /*******************************************/
         
-        
-        //X, Y, Yaw GPS estimation
-        newX_GPS = (GPS_lon - base_lon)*767.4/10000*1e6;
-        newY_GPS = (GPS_lat - base_lat)*1111.6/10000*1e6;
-        z_gps[2][0] = atan2(newY_GPS - z_gps[1][0], newX_GPS - z_gps[0][0]); //yaw = atan(DY/DX)
-        z_gps[0][0] = newX_GPS; // X
-        z_gps[1][0] = newY_GPS; // Y
-        
+        z_gps[0][0] = (GPS_lon - base_lon)*767.4/10000*1e6;
+        z_gps[1][0] = (GPS_lat - base_lat)*1111.6/10000*1e6;
         //neglect the curvature of earth by applying coeff to convert lat/lon in x/y
         
         
-        if (the_time<=35) printf("the time : %d Wait during IMU calibration\n" , the_time);
-        if (the_time>35)
+        if (the_time<=20) printf("the time : %d - Calibration (Roll = 0 , Yaw = 180) \n" , the_time);
+        if (the_time>20)
         {
             
+            if (first_gps == 0) //initialize the first value of GPS to Kalman
+            {
+                mu_kalman[0][0] = z_gps[0][0];
+                mu_kalman[1][0] = z_gps[1][0];
+                first_gps == 1;
+                
+            }
             double dT = currentTime.toSec()-previousTime.toSec();
             
-            double time_pred = ros::Time::now().toSec();
-            //PREDICTION STEP
-            //State Covariance Matrix
-            Kalman_eval_State_cov(P_kk_1, Kalman_P, mu_kalman, dT, currentSpeed);
+            //printf("the time : %d - dt : %f - speed : %f - yaw : %f \n es_x : %f - es_y : %f\n" , the_time, dT,currentSpeed,currentYaw,mu_kalman[0][0],mu_kalman[0][1]);
+            
+            mu_kk_1[0][0] = Kalman_evalX(mu_kalman[0][0], currentSpeed, currentYaw, (float)dT);
+            mu_kk_1[1][0] = Kalman_evalY(mu_kalman[1][0], currentSpeed, currentYaw, (float)dT);
+            
+            //P_kk_1 = eval(J)*P*eval(J)' + Q // J is identity matrix
+            sum22(Kalman_P,Kalman_Q,P_kk_1);
             
             
-            //State estimation
-            mu_kk_1[2][0] = Kalman_evalYaw(mu_kalman[2][0], currentYaw, oldYaw);
-            mu_kk_1[0][0] = Kalman_evalX(mu_kalman[0][0], currentSpeed, mu_kk_1[2][0], (float)dT);
-            mu_kk_1[1][0] = Kalman_evalY(mu_kalman[1][0], currentSpeed, mu_kk_1[2][0], (float)dT);
-            oldYaw = currentYaw;
-            double dt_pred = ros::Time::now().toSec()-time_pred;
-            
-            //                std::ofstream myfile;
-            //                myfile.open("/home/pi/time_pred.txt", std::ios::app);
-            //                myfile << dt_pred << "\n";
-            //                myfile.close();
-            
-            
-            
-            //UPDATE STEP
-            if (GPS_data_rec > Update_phase && currentSpeed > 2.0) //We do not perform updates at zero speed (in such a case, IMU much more precise)
+            if (GPS_data_rec > Update_phase)
             {
-                double time_up = ros::Time::now().toSec();
-                //if GPS measurement is an outlier, we do nothing, else we update
-                //also test if GPS angle has changed (otherwise GPS measurement is the same as before and must not be taken into account)
-                if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
-                    printf("######## GPS UPDATE ########\n");
-                    substr31(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
-                    
-                    //ensuring that angle difference is betwenn -PI and PI
-                    if(ybar[2][0] > PI)
-                    {
-                        ybar[2][0] = ybar[2][0] - 2*PI;
-                    }else if(ybar[2][0] < -PI)
-                    {
-                        ybar[2][0] = ybar[2][0] + 2*PI;
-                    }
-                    
-                    sum33(P_kk_1,Kalman_R,Kalman_S); //S = H*P_kk_1*H'+ R;
-                    invert33(Kalman_S,Kalman_S_inv); //S^-1
-                    multip33by33(P_kk_1,Kalman_S_inv,Kalman_K); //K = P_kk_1*H'*S^(-1)
-                    multip33by31(Kalman_K,ybar,Kalman_K_ybar); //K*ybar;
-                    sum31(mu_kk_1,Kalman_K_ybar,mu_kalman); //mu_kalman = mu_kk_1 + K*ybar;
-                    substr33(Kalman_eye,Kalman_K,Kalman_eye_min_K);//(eye(2)-K*H)
-                    multip33by33(Kalman_eye_min_K,P_kk_1,Kalman_P);//P = (eye(2)-K*H)*P_kk_1;
-                    Update_phase = GPS_data_rec;
-                    
-                    double dt_up = ros::Time::now().toSec()-time_pred;
-                    //                        std::ofstream myfile;
-                    //                        myfile.open("/home/pi/time_update.txt", std::ios::app);
-                    //                        myfile << dt_up << "\n";
-                    //                        myfile.close();
-                    
-                    
-                    
-                }
-                else
-                {
-                    equal31(mu_kk_1,mu_kalman);
-                    equal33(P_kk_1,Kalman_P);
-                }
+                substr21(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
+                sum22(P_kk_1,Kalman_R,Kalman_S); //S = H*P_kk_1*H'+ R;
+                invert22(Kalman_S,Kalman_S_inv); //S^-1
+                multip22by22(P_kk_1,Kalman_S_inv,Kalman_K); //K = P_kk_1*H'*S^(-1)
+                multip22by21(Kalman_K,ybar,Kalman_K_ybar); //K*ybar;
+                sum21(mu_kk_1,Kalman_K_ybar,mu_kalman); //mu_kalman = mu_kk_1 + K*ybar;
+                substr22(Kalman_eye,Kalman_K,Kalman_eye_min_K);//(eye(2)-K*H)
+                multip22by22(Kalman_eye_min_K,P_kk_1,Kalman_P);//P = (eye(2)-K*H)*P_kk_1;
+                Update_phase = GPS_data_rec;
             }
             
             else{
-                equal31(mu_kk_1,mu_kalman);
-                equal33(P_kk_1,Kalman_P);
+                equal21(mu_kk_1,mu_kalman);
+                equal22(P_kk_1,Kalman_P);
             }
-            
-            
-            
-            if(printFreq>2){
-                printf("the time : %d - dt : %f - speed : %f - yaw : %f \n x : %f - y : %f\n" , the_time, dT,currentSpeed,mu_kalman[2][0],mu_kalman[0][0],mu_kalman[1][0]);
-                printFreq = 0;
-            }else{
-                printFreq++;
-            }
-            
-            
             
         }
         
@@ -829,4 +686,5 @@ int main(int argc, char **argv)
     
 	  	return 0;
 }
+
 

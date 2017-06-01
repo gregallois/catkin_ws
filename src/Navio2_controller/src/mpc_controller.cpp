@@ -27,7 +27,7 @@ void read_State(sensor_msgs::Imu state_msg)
     currentState[0][0] = state_msg.orientation.x;       //x
     currentState[1][0] = state_msg.orientation.y;       //y
     currentState[2][0] = state_msg.orientation.z;       //yaw
-    currentState[4][0] = state_msg.angular_velocity.x;  //roll
+    currentState[4][0] = state_msg.angular_velocity.x;  //roll (WARNING: here it is in degrees -> convert to radians)
     currentState[5][0] = state_msg.angular_velocity.y;  //speed
 }
 
@@ -73,7 +73,7 @@ void read_State(sensor_msgs::Imu state_msg)
             //send controls through messages
             //save values into msg container
             control_msg.header.stamp = ros::Time::now();
-            control_msg.temperature = toSendControl[0][0]; // send roll reference
+            control_msg.temperature = toSendControl[0][0]; // send roll reference (WARNING convert to degrees)
             control_msg.variance = toSendControl[1][0];    // send speed reference
             
             //publish message

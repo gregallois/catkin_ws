@@ -30,7 +30,7 @@
 	#define Kd1 0.03f
 
     //Mahalanobis outlier rejection
-    #define CHI_SQUARE_THRESHOLD 4.11
+    #define CHI_SQUARE_THRESHOLD 6.55
 
 	// PID for roll angle outer loop
 	float Kp2[3] = {0, 1.05f, 1.22f};
@@ -68,10 +68,10 @@
 	int first_gps = 0;
 
 	//Variables for Kalman
-	float Kalman_P[3][3] = {{0.5, 0.0, 0.0},{0, 0.5, 0.0}, {0.0, 0.0, 0.05}}; //initial state covariance matrix
-    float Kalman_Qw[3][3] = {{0.0000001, 0.0, 0.0},{0, 0.0000001, 0.0}, {0.0, 0.0, 0.0000001}}; //process noise covariance matrix
-	float Kalman_Q[2][2] = {{0.0001, 0.0},{0.0, 0.0001}}; //yaw and speed measurements covariance matrix
-    float Kalman_R[3][3] = {{10.05, 0.0, -0.26},{0, 10.2, -1.2}, {-0.26, -1.2, 2.0}};//GPS measurements covariance matrix
+	float Kalman_P[3][3] = {{1.5, 0.0, 0.0},{0, 1.5, 0.0}, {0.0, 0.0, 1}}; //initial state covariance matrix
+    float Kalman_Qw[3][3] = {{0.0001, 0.0, 0.0},{0, 0.0001, 0.0}, {0.0, 0.0, 0.0001}}; //process noise covariance matrix
+	float Kalman_Q[2][2] = {{0.002, 0.0},{0.0, 0.00001}}; //yaw and speed measurements covariance matrix
+    float Kalman_R[3][3] = {{3.1, 0.0, -0.26},{0, 4.2, -1.2}, {-0.26, -1.2, 2.0}};//GPS measurements covariance matrix
 	float Kalman_S[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
 	float Kalman_S_inv[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
     float Kalman_K[3][3] = {{0.0, 0.0, 0.0},{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
