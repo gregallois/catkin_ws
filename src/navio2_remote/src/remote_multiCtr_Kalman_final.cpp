@@ -636,7 +636,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
 			//write readings on pwm output
 			motor.set_duty_cycle(MOTOR_PWM_OUT, ((float)motor_input)/1000.0f); 
 			servo.set_duty_cycle(SERVO_PWM_OUT, ((float)servo_input)/1000.0f);
-            printf("%i, %f, %f\n", motor_input, desired_speed, currentSpeed);
+            //printf("%i, %f, %f\n", motor_input, desired_speed, currentSpeed);
 			//Measure time for initial roll calibration
 			the_time = ros::Time::now().sec%1000-initTime;
 
@@ -690,7 +690,7 @@ bool checkOutlier(float covariance[3][3], float mean[3][1], float point[3][1])
                     //if GPS measurement is an outlier, we do nothing, else we update
                     //also test if GPS angle has changed (otherwise GPS measurement is the same as before and must not be taken into account)
                     if(checkOutlier(P_kk_1, mu_kk_1, z_gps)){
-                        printf("######## GPS UPDATE ########\n");
+                        //printf("######## GPS UPDATE ########\n");
                         substr31(z_gps,mu_kk_1,ybar); //ybar = z - H*mu_kk_1;
                         
                         //ensuring that angle difference is betwenn -PI and PI
